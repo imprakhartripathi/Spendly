@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
-// Connect to MongoDB
+
 connectMongoDB();
 
 app.listen(PORT, () => {

@@ -7,12 +7,20 @@ export enum Tier {
   Premium = "premium",
 }
 
+export enum Expiration {
+  Default = "7d",
+  None = "never",
+  OneMonth = "30d",
+  TwoMonth = "60d",
+}
+
 export interface IUser extends Document {
   fullName: string;
   email: string;
   password: string;
 
   tier: Tier;
+  sessionTimeOut: Expiration;
   income: number;
   notifications: INotification[];
 
@@ -30,13 +38,14 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, required: true },
 
     tier: { type: String, enum: Object.values(Tier), default: Tier.Free },
+    sessionTimeOut: { type: String, enum: Object.values(Expiration), default: Expiration.Default },
     income: { type: Number, default: 0 },
 
     notifications: { type: [NotificationSchema], default: [] },
     notificationsOn: { type: Boolean, default: true },
     emailNotificationsOn: { type: Boolean, default: true },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 export default mongoose.model<IUser>("User", UserSchema);
