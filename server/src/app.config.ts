@@ -22,3 +22,18 @@ export const backupPort = 4000;
 export const jwtKey =
   process.env.JWT_SECRET ||
   "dev_fallback_71c2b94e8a1045d28c8a3d2c905fa7b34bde1e6c5f0f4993b02174c9f9e16a3f";
+
+
+export const generateISTTimestamp = (): string => {
+  return new Date().toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+};

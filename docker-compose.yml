@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"  # Nginx serves on 80 inside container
+    restart: always
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    restart: always
+    environment:
+      - NODE_ENV=production
