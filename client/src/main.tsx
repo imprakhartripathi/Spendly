@@ -2,16 +2,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Authenticator } from "./components/Authenticator/Authenticator";
+import NotFound from "./components/NotFound/NotFound";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <HomePage />,
-  // },
-  // {
-  //   path: "*",
-  //   element: <NotFoundPage />,
-  // },
+  {
+    path: "/auth",
+    element: <Authenticator />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -19,3 +21,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+
+// #38b6ff
+// #fae04a
+// #f5c141
