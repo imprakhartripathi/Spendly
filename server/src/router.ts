@@ -1,5 +1,5 @@
 import express from "express";
-import { checkTokenExpiry, login, signup } from "./controllers/auth.controller";
+import { checkTokenExpiry, login, sendUserInfo, signup } from "./controllers/auth.controller";
 
 export const router = express.Router();
 
@@ -16,3 +16,4 @@ router.get('/ping', (req, res) => {
 router.post('/signup', signup);
 router.post('/login', login);
 router.get("/check-token", checkTokenExpiry);
+router.get("/getuserinfo", sendUserInfo);
