@@ -1,14 +1,53 @@
-// main.tsx or index.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
 import { Authenticator } from "./components/Authenticator/Authenticator";
 import NotFound from "./components/NotFound/NotFound";
+import Dashboard from "./components/Dashboard/Dashboard";
+
+// Protected layout to dynamically redirect
+const ProtectedLayout: React.FC = () => {
+  const [isAuth, setIsAuth] = useState<boolean | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuth(false);
+      navigate("/auth");
+    } else {
+      setIsAuth(true);
+    }
+  }, [navigate]);
+
+  if (isAuth === null) return <div>Loading...</div>;
+
+  return isAuth ? <Outlet /> : null;
+};
 
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: <Navigate to="/dashboard" />,
+  },
+  {
     path: "/auth",
     element: <Authenticator />,
+  },
+  {
+    element: <ProtectedLayout />, // wrapper layout for protected routes
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+    ],
   },
   {
     path: "*",
@@ -21,8 +60,3 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
-
-
-// #38b6ff
-// #fae04a
-// #f5c141

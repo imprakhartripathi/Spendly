@@ -55,8 +55,11 @@ export const Authenticator: React.FC = () => {
     setForm({ ...form, [e.target.name]: sanitized });
   };
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const endpoint = isSignup ? "/signup" : "/login";
     const payload = isSignup
@@ -72,29 +75,26 @@ export const Authenticator: React.FC = () => {
 
     try {
       const res = await axios.post(`${backendURL}${endpoint}`, payload);
-    //   console.log(res);
       const token = res.data.token;
-      const name = res.data.user.fullName;
-        const session = res.data.timeout;
-        let message = `Welcome ${name}, your session is valid for ${session}`;
-
-        if (session === 'never') {
-            message = `Welcome ${name}, your session has infinite validity`;
-        }
-
       localStorage.setItem("token", token);
-      setSnackbar({
-        open: true,
-        message: message,
-      });
 
-      // Redirect after a small delay
+      const name = res.data.user.fullName;
+      const session = res.data.timeout;
+      let message = `Welcome ${name}, your session is valid for ${session}`;
+      if (session === "never") {
+        message = `Welcome ${name}, your session has infinite validity`;
+      }
+
+      setSnackbar({ open: true, message });
+
       setTimeout(() => {
-        navigate("/");
-      }, 1500);
+        navigate("/dashboard");
+      }, 1000);
     } catch (err: any) {
       const message = err?.response?.data?.message || "Something went wrong!";
       setSnackbar({ open: true, message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,8 +173,15 @@ export const Authenticator: React.FC = () => {
             fullWidth
             variant="contained"
             className="auth-button"
+            disabled={loading}
           >
-            {isSignup ? "Sign Up" : "Login"}
+            {loading
+              ? isSignup
+                ? "Signing up..."
+                : "Logging in..."
+              : isSignup
+              ? "Sign Up"
+              : "Login"}
           </Button>
         </Box>
 
