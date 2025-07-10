@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        navigate("/login");
+        navigate("/auth");
         return;
       }
 

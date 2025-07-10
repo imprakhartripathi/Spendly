@@ -1,5 +1,7 @@
 import express from "express";
 import { checkTokenExpiry, login, sendUserInfo, signup } from "./controllers/auth.controller";
+import { deleteUser, updateUser } from "./controllers/user.controller";
+import { authenticate } from "./middleware/auth.middleware";
 
 export const router = express.Router();
 
@@ -17,3 +19,6 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.get("/check-token", checkTokenExpiry);
 router.get("/getuserinfo", sendUserInfo);
+
+router.patch("/user/edit/:id", authenticate, updateUser); //takes updates from body
+router.delete("/user/delete/:id", authenticate, deleteUser);
