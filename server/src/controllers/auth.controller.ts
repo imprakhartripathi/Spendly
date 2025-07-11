@@ -84,7 +84,7 @@ export const login = async (
 
     const jwtOptions =
       user.sessionTimeOut === "never" ? {} : { expiresIn: user.sessionTimeOut };
-    const token = jwt.sign({ email }, jwtKey, jwtOptions);
+    const token = jwt.sign({ email, id: user._id }, jwtKey, jwtOptions);
     const loginTime = generateISTTimestamp();
 
     await sendWelcomeEmail(

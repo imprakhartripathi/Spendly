@@ -2,6 +2,7 @@ import express from "express";
 import { checkTokenExpiry, login, sendUserInfo, signup } from "./controllers/auth.controller";
 import { deleteUser, updateUser } from "./controllers/user.controller";
 import { authenticate } from "./middleware/auth.middleware";
+import { requireSelf } from "./middleware/ownership.middleware";
 
 export const router = express.Router();
 
@@ -20,5 +21,5 @@ router.post('/login', login);
 router.get("/check-token", checkTokenExpiry);
 router.get("/getuserinfo", sendUserInfo);
 
-router.patch("/user/edit/:id", authenticate, updateUser); //takes updates from body
-router.delete("/user/delete/:id", authenticate, deleteUser);
+router.patch("/user/edit/:id", authenticate, requireSelf, updateUser); // takes updates via body and id for finding
+router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // just id
