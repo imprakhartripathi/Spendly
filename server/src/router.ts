@@ -3,6 +3,7 @@ import { checkTokenExpiry, login, sendUserInfo, signup } from "./controllers/aut
 import { deleteUser, updateUser } from "./controllers/user.controller";
 import { authenticate } from "./middleware/auth.middleware";
 import { requireSelf } from "./middleware/ownership.middleware";
+import { createTransection, deleteTransection, getAllTransections, getTransectionById, updateTransection } from "./controllers/transection.controller";
 
 export const router = express.Router();
 
@@ -23,3 +24,9 @@ router.get("/getuserinfo", sendUserInfo);
 
 router.patch("/user/edit/:id", authenticate, requireSelf, updateUser); // takes updates via body and id for finding
 router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // just id
+
+router.post("/user/:userId/transection", authenticate, createTransection);
+router.get("/user/:userId/transections", authenticate, getAllTransections);
+router.get("/user/:userId/transection/:transectionId", authenticate, getTransectionById);
+router.patch("/user/:userId/transection/:transectionId", authenticate, updateTransection);
+router.delete("/user/:userId/transection/:transectionId", authenticate, deleteTransection);

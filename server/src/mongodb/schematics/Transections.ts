@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 
 export enum TransectionType {
   Credit = "credit",
@@ -6,6 +6,7 @@ export enum TransectionType {
 }
 
 export interface ITransection {
+  _id: Types.ObjectId;
   transectionType: TransectionType;
   amount: number;
   spentOn: string;
