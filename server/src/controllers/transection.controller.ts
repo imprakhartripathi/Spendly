@@ -7,7 +7,7 @@ export const createTransection = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.id;
     const transection = req.body;
 
     const user = await User.findById(userId);
@@ -34,7 +34,7 @@ export const getAllTransections = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.id;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -54,7 +54,9 @@ export const getTransectionById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { userId, transectionId } = req.params;
+    // const { userId, transectionId } = req.params;
+    const userId = req.params.id;
+    const transectionId = req.params.transectionId;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -83,7 +85,8 @@ export const updateTransection = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { userId, transectionId } = req.params;
+    const userId = req.params.id;
+    const transectionId = req.params.transectionId;
     const updates = req.body;
 
     const user = await User.findById(userId);
@@ -116,7 +119,8 @@ export const deleteTransection = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { userId, transectionId } = req.params;
+    const userId = req.params.id;
+    const transectionId = req.params.transectionId;
     const user = await User.findById(userId);
 
     if (!user) {

@@ -25,8 +25,8 @@ router.get("/getuserinfo", sendUserInfo);
 router.patch("/user/edit/:id", authenticate, requireSelf, updateUser); // takes updates via body and id for finding
 router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // just id
 
-router.post("/user/:userId/transection", authenticate, createTransection);
-router.get("/user/:userId/transections", authenticate, getAllTransections);
-router.get("/user/:userId/transection/:transectionId", authenticate, getTransectionById);
-router.patch("/user/:userId/transection/:transectionId", authenticate, updateTransection);
-router.delete("/user/:userId/transection/:transectionId", authenticate, deleteTransection);
+router.post("/user/:id/add/transection", authenticate, requireSelf, createTransection);
+router.get("/user/:id/transections", authenticate, requireSelf, getAllTransections);
+router.get("/user/:id/transection/:transectionId", authenticate, requireSelf, getTransectionById);
+router.patch("/user/:id/edit/transection/:transectionId", authenticate, requireSelf, updateTransection);
+router.delete("/user/:id/delete/transection/:transectionId", authenticate, requireSelf, deleteTransection);
