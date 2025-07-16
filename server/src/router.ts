@@ -27,6 +27,6 @@ router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // jus
 
 router.post("/user/:id/add/transection", authenticate, requireSelf, createTransection);
 router.get("/user/:id/transections", authenticate, requireSelf, getAllTransections);
-router.get("/user/:id/transection/:transectionId", authenticate, requireSelf, getTransectionById);
-router.patch("/user/:id/edit/transection/:transectionId", authenticate, requireSelf, updateTransection);
-router.delete("/user/:id/delete/transection/:transectionId", authenticate, requireSelf, deleteTransection);
+router.get("/user/:id/transection", authenticate, requireSelf, getTransectionById);
+router.patch("/user/:id/edit/transection", authenticate, requireSelf, updateTransection);
+router.delete("/user/:id/delete/transection", authenticate, requireSelf, deleteTransection);

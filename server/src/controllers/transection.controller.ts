@@ -54,11 +54,15 @@ export const getTransectionById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // const { userId, transectionId } = req.params;
     const userId = req.params.id;
-    const transectionId = req.params.transectionId;
-    const user = await User.findById(userId);
+    const transectionId = req.query.transectionId as string;
 
+    if (!transectionId) {
+      res.status(400).json({ message: "transectionId query parameter is required" });
+      return;
+    }
+
+    const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -86,8 +90,13 @@ export const updateTransection = async (
 ): Promise<void> => {
   try {
     const userId = req.params.id;
-    const transectionId = req.params.transectionId;
+    const transectionId = req.query.transectionId as string;
     const updates = req.body;
+
+    if (!transectionId) {
+      res.status(400).json({ message: "transectionId query parameter is required" });
+      return;
+    }
 
     const user = await User.findById(userId);
     if (!user) {
@@ -120,9 +129,14 @@ export const deleteTransection = async (
 ): Promise<void> => {
   try {
     const userId = req.params.id;
-    const transectionId = req.params.transectionId;
-    const user = await User.findById(userId);
+    const transectionId = req.query.transectionId as string;
 
+    if (!transectionId) {
+      res.status(400).json({ message: "transectionId query parameter is required" });
+      return;
+    }
+
+    const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
