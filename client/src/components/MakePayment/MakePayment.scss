@@ -1,0 +1,53 @@
+.payment-container {
+  text-align: center;
+  padding: 2rem;
+
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .tier-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tier-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 150px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #fff;
+
+    &.selected {
+      border-color: #2e97cc;
+      background: #e0f7ff;
+    }
+
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    ul {
+      text-align: left;
+      padding-left: 1rem;
+    }
+  }
+
+  button {
+    background: #2e97cc;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}

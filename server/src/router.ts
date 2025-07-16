@@ -4,6 +4,7 @@ import { deleteUser, updateUser } from "./controllers/user.controller";
 import { authenticate } from "./middleware/auth.middleware";
 import { requireSelf } from "./middleware/ownership.middleware";
 import { createTransection, deleteTransection, getAllTransections, getTransectionById, updateTransection } from "./controllers/transection.controller";
+import { cancelSubscription, createSubscription, verifyPayment } from "./controllers/razorpay.controller";
 
 export const router = express.Router();
 
@@ -21,6 +22,11 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.get("/check-token", checkTokenExpiry);
 router.get("/getuserinfo", sendUserInfo);
+
+router.post("/create-subscription", authenticate, createSubscription);
+router.post("/verify-payment/:id", authenticate, requireSelf, verifyPayment);
+router.post("/cancel-subs/:id", authenticate, requireSelf, cancelSubscription);
+
 
 router.patch("/user/edit/:id", authenticate, requireSelf, updateUser); // takes updates via body and id for finding
 router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // just id

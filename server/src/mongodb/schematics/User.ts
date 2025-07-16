@@ -22,6 +22,10 @@ export interface IUser extends Document {
   image: string;
 
   tier: Tier;
+  subscriptionId: string | null;
+  paymentId: string | null;
+  expiresAt: number | null;
+
   sessionTimeOut: Expiration;
   income: number;
   monthlyBudget: number;
@@ -44,6 +48,10 @@ const UserSchema = new Schema<IUser>(
     image: { type: String, default: null },
 
     tier: { type: String, enum: Object.values(Tier), default: Tier.Free },
+    subscriptionId: { type: String, default: null },
+    paymentId: { type: String, default: null },
+    expiresAt: { type: Number, default: null },
+
     sessionTimeOut: {
       type: String,
       enum: Object.values(Expiration),
