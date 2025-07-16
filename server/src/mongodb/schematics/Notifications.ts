@@ -1,9 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export enum NotificationType {
-  Sys = "system",
+  Sys = "System",
   Auth = "Authentication",
   Promo = "Promotional",
+  Budget = "Budget"
 }
 
 export interface INotification extends Document {

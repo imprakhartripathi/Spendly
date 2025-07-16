@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../mongodb/schematics/User";
+import { assessTransactionAndNotify } from "./budget.assessment.controller";
+import { NotificationType } from "../mongodb/schematics/Notifications";
 
 export const createTransection = async (
   req: Request,
@@ -23,6 +25,16 @@ export const createTransection = async (
       message: "Transection created",
       transections: user.transections,
     });
+
+    assessTransactionAndNotify(
+      user.fullName,
+      user.email,
+      transection.amount,
+      user.income,
+      transection.spentOn,
+      new Date().toISOString(),
+      NotificationType.Budget
+    );
   } catch (err) {
     next(err);
   }
@@ -58,7 +70,9 @@ export const getTransectionById = async (
     const transectionId = req.query.transectionId as string;
 
     if (!transectionId) {
-      res.status(400).json({ message: "transectionId query parameter is required" });
+      res
+        .status(400)
+        .json({ message: "transectionId query parameter is required" });
       return;
     }
 
@@ -94,7 +108,9 @@ export const updateTransection = async (
     const updates = req.body;
 
     if (!transectionId) {
-      res.status(400).json({ message: "transectionId query parameter is required" });
+      res
+        .status(400)
+        .json({ message: "transectionId query parameter is required" });
       return;
     }
 
@@ -113,10 +129,23 @@ export const updateTransection = async (
       return;
     }
 
+    const originalAmount = transection.amount;
     Object.assign(transection, updates);
     await user.save();
 
     res.status(200).json({ message: "Transection updated", transection });
+
+    if (updates.amount !== undefined && updates.amount !== originalAmount) {
+      await assessTransactionAndNotify(
+        user.fullName,
+        user.email,
+        updates.amount,
+        user.income,
+        transection.spentOn,
+        new Date().toISOString(),
+        NotificationType.Budget
+      );
+    }
   } catch (err) {
     next(err);
   }
@@ -132,7 +161,9 @@ export const deleteTransection = async (
     const transectionId = req.query.transectionId as string;
 
     if (!transectionId) {
-      res.status(400).json({ message: "transectionId query parameter is required" });
+      res
+        .status(400)
+        .json({ message: "transectionId query parameter is required" });
       return;
     }
 
