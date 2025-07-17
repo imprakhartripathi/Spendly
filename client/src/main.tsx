@@ -7,7 +7,8 @@ import {
   Outlet,
   useNavigate,
 } from "react-router-dom";
-import { Authenticator } from "./components/Authenticator/Authenticator";
+import Authenticator from "./components/Authenticator/Authenticator";
+
 import NotFound from "./components/NotFound/NotFound";
 import Dashboard from "./components/Dashboard/Dashboard";
 import MakePayment from "./components/MakePayment/MakePayment";

@@ -11,10 +11,28 @@ const TIERS = ["free", "plus", "premium"] as const;
 type Tier = (typeof TIERS)[number];
 
 const TIER_FEATURES: Record<Tier, string[]> = {
-  free: ["Basic Budgeting", "Manual Transactions"],
-  plus: ["All Free Features", "Auto Transaction Reminders", "Email Alerts"],
-  premium: ["All Plus Features", "Advanced Analytics", "Priority Support"],
+  free: [
+    "User registration and login",
+    "Add/edit/delete income and expenses",
+    "View list of transactions",
+    "View basic monthly summary (total income and expenses)",
+  ],
+  plus: [
+    "All Free features",
+    "Set and track budgets",
+    "Category-wise analytics (charts)",
+    "Download reports in .txt format",
+    "View spending trends by category",
+  ],
+  premium: [
+    "All Plus features",
+    "Advanced reports in downloadable PDF format",
+    "Recurring transactions setup",
+    "Alerts and reminders for bills/budget limits",
+    "Monthly financial goal tracking",
+  ],
 };
+
 
 const MakePayment: React.FC = () => {
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
@@ -22,6 +40,7 @@ const MakePayment: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +61,8 @@ const MakePayment: React.FC = () => {
         setSelectedTier(userData.tier);
         setUserId(userData._id);
       })
-      .catch(() => alert("Failed to fetch user info"));
+      .catch(() => alert("Failed to fetch user info"))
+      .finally(() => setUserLoading(false));
   }, []);
 
   const handleContinue = async () => {
@@ -68,6 +88,7 @@ const MakePayment: React.FC = () => {
       alert("Subscription Cancelled. Downgraded to Free.");
       setCurrentTier("free");
       setLoading(false);
+      window.location.reload();
     } else {
       setLoading(true);
       const subsRes = await axios.post(
@@ -79,7 +100,7 @@ const MakePayment: React.FC = () => {
       const { id: subscription_id } = subsRes.data;
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        key: import.meta.env.RAZORPAY_KEY_ID,
         name: "Spendly",
         description: `Upgrade to ${selectedTier}`,
         subscription_id,
@@ -97,6 +118,8 @@ const MakePayment: React.FC = () => {
 
           alert(`Successfully upgraded to ${selectedTier}`);
           setCurrentTier(selectedTier);
+          window.location.reload();
+
         },
         prefill: {
           name: user?.fullName || "",
@@ -112,6 +135,7 @@ const MakePayment: React.FC = () => {
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
       setLoading(false);
+      
     }
   };
 
@@ -146,19 +170,20 @@ const MakePayment: React.FC = () => {
     return "Continue";
   };
 
+
   const isButtonDisabled = () => {
     if (loading || !selectedTier || !userId) return true;
-
-    if (user?.tier === "free") return selectedTier === "free";
-
-    if (user?.tier === "plus") return selectedTier === "plus";
-
-    if (user?.tier === "premium") return selectedTier === "premium";
-
-    return false;
+    return user?.tier === selectedTier;
   };
 
-
+  if (userLoading) {
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+        <p>Loading user information...</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -169,19 +194,15 @@ const MakePayment: React.FC = () => {
     >
       <div className="img">
         <img src={logo} alt="Logo" className="logo" />
-
         <div className="btn">
           <button onClick={handleContinue} disabled={isButtonDisabled()}>
             {getButtonLabel()}
           </button>
-
-          <button className="back-button" onClick={() => navigate(-1)}>
-            Back
+          <button className="back-button" onClick={() => navigate("/")}>
+            Home
           </button>
         </div>
       </div>
-
-      <h1>Choose Your Plan</h1>
 
       <div className="tier-options">
         {TIERS.map((tier) => (
@@ -193,14 +214,17 @@ const MakePayment: React.FC = () => {
             whileTap={{ scale: 0.97 }}
           >
             <h2>{capitalize(tier)}</h2>
+            <p className="price">
+              {tier === "free"
+                ? "₹0 / month"
+                : `₹${tier === "plus" ? 99 : 199} / month`}
+            </p>
+
             <ul>
               {TIER_FEATURES[tier].map((feature, idx) => (
                 <li key={idx}>{feature}</li>
               ))}
             </ul>
-            {tier !== "free" && (
-              <p className="price">₹{tier === "plus" ? 99 : 199} / month</p>
-            )}
             {currentTier === tier && (
               <span className="current-label">Current Plan</span>
             )}
@@ -215,13 +239,30 @@ const MakePayment: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h3>Current Subscription</h3>
-          <p>
-            Plan: <strong>{user.tier}</strong>
-          </p>
-          <p>Subscription ID: {user.subscriptionId || "N/A"}</p>
-          <p>Payment ID: {user.paymentId || "N/A"}</p>
-          <p>Valid Till: {getReadableDate(user.expiresAt)}</p>
+          <h3>Subscription Details</h3>
+          <div className="subscription-grid">
+            <div>
+              <strong>Name:</strong> {user.fullName}
+            </div>
+            <div>
+              <strong>Email:</strong> {user.email}
+            </div>
+            <div>
+              <strong>Contact:</strong> {user.contact || "N/A"}
+            </div>
+            <div>
+              <strong>Current Plan:</strong> {capitalize(user.tier)}
+            </div>
+            <div>
+              <strong>Subscription ID:</strong> {user.subscriptionId || "N/A"}
+            </div>
+            <div>
+              <strong>Payment ID:</strong> {user.paymentId || "N/A"}
+            </div>
+            <div>
+              <strong>Next Due Date:</strong> {getReadableDate(user.expiresAt)}
+            </div>
+          </div>
         </motion.div>
       )}
     </motion.div>

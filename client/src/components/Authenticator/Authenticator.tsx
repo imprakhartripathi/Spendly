@@ -1,15 +1,5 @@
-// src/components/Authenticator.tsx
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Paper,
-  Snackbar,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Snackbar, IconButton, InputAdornment } from "@mui/material";
 import { motion } from "framer-motion";
 import { backendURL } from "../../app.config";
 import axios from "axios";
@@ -19,80 +9,44 @@ import logo from "../../assets/logo.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-const MotionPaper = motion(Paper);
-
-export const Authenticator: React.FC = () => {
+const Authenticator: React.FC = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const navType = performance.getEntriesByType(
-      "navigation"
-    )[0] as PerformanceNavigationTiming;
-
-    if (navType?.type === "back_forward") {
-      window.location.reload();
-    }
-  }, []);
-
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-  });
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ fullName: "", email: "", password: "" });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   const sanitizeInput = (value: string) =>
     DOMPurify.sanitize(value.trim(), { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeInput(e.target.value);
-    setForm({ ...form, [e.target.name]: sanitized });
+    setForm({ ...form, [e.target.name]: sanitizeInput(e.target.value) });
   };
-
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     const endpoint = isSignup ? "/signup" : "/login";
     const payload = isSignup
-      ? {
-          fullName: sanitizeInput(form.fullName),
-          email: sanitizeInput(form.email),
-          password: sanitizeInput(form.password),
-        }
-      : {
-          email: sanitizeInput(form.email),
-          password: sanitizeInput(form.password),
-        };
+      ? { fullName: form.fullName, email: form.email, password: form.password }
+      : { email: form.email, password: form.password };
 
     try {
       const res = await axios.post(`${backendURL}${endpoint}`, payload);
-      const token = res.data.token;
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", res.data.token);
 
-      const name = res.data.user.fullName;
-      const session = res.data.timeout;
-      let message = `Welcome ${name}, your session is valid for ${session}`;
-      if (session === "never") {
-        message = `Welcome ${name}, your session has infinite validity`;
-      }
-
+      const message = `Welcome ${res.data.user.fullName}`;
       setSnackbar({ open: true, message });
 
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate(isSignup ? "/pay" : "/dashboard");
       }, 1000);
     } catch (err: any) {
-      const message = err?.response?.data?.message || "Something went wrong!";
-      setSnackbar({ open: true, message });
+      setSnackbar({
+        open: true,
+        message: err?.response?.data?.message || "Something went wrong!",
+      });
     } finally {
       setLoading(false);
     }
@@ -105,120 +59,83 @@ export const Authenticator: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <MotionPaper
-        elevation={6}
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="auth-paper"
-      >
-        <img src={logo} alt="Logo" className="logo" />
-
-        <Typography variant="subtitle1" className="auth-subtitle">
-          {isSignup
-            ? "Sign up to get started."
-            : "Login to continue to your dashboard."}
-        </Typography>
-
-        <Box component="form" onSubmit={handleSubmit}>
-          {isSignup && (
-            <TextField
-              label="Full Name"
-              name="fullName"
-              fullWidth
-              required
-              margin="normal"
-              value={form.fullName}
-              onChange={handleChange}
-              className="auth-input"
-            />
-          )}
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            fullWidth
-            required
-            margin="normal"
-            value={form.email}
-            onChange={handleChange}
-            className="auth-input"
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            required
-            margin="normal"
-            value={form.password}
-            onChange={handleChange}
-            className="auth-input"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className="auth-button"
-            disabled={loading}
-          >
-            {loading
-              ? isSignup
-                ? "Signing up..."
-                : "Logging in..."
-              : isSignup
-              ? "Sign Up"
-              : "Login"}
-          </Button>
-        </Box>
-
-        <Typography variant="body2" className="auth-toggle">
-          {isSignup ? (
-            <>
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="auth-toggle-btn"
-              >
-                Switch to Login
-              </button>
-            </>
-          ) : (
-            <>
-              Don’t have an account?{" "}
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="auth-toggle-btn"
-              >
-                Switch to Sign up
-              </button>
-            </>
-          )}
-        </Typography>
-      </MotionPaper>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={5000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        message={snackbar.message}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
+  <div className="auth-base-card">
+    <div className="logo-wrapper">
+      <img src={logo} alt="Spendly Logo" />
     </div>
+
+    <motion.div
+      className="auth-layer-card"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      <h2>{isSignup ? "Create Your Account" : "Login to Spendly"}</h2>
+
+      <form onSubmit={handleSubmit}>
+        {isSignup && (
+          <TextField
+            label="Full Name"
+            name="fullName"
+            fullWidth
+            required
+            margin="normal"
+            value={form.fullName}
+            onChange={handleChange}
+          />
+        )}
+        <TextField
+          label="Email"
+          name="email"
+          type="email"
+          fullWidth
+          required
+          margin="normal"
+          value={form.email}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          fullWidth
+          required
+          margin="normal"
+          value={form.password}
+          onChange={handleChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <button type="submit" className="primary-btn" disabled={loading}>
+          {loading ? (isSignup ? "Signing Up..." : "Logging In...") : isSignup ? "Sign Up" : "Login"}
+        </button>
+      </form>
+
+      <p className="auth-toggle">
+        {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+        <button onClick={toggleMode}>{isSignup ? "Login Here" : "Sign Up"}</button>
+      </p>
+    </motion.div>
+  </div>
+
+  <Snackbar
+    open={snackbar.open}
+    autoHideDuration={5000}
+    onClose={() => setSnackbar({ ...snackbar, open: false })}
+    message={snackbar.message}
+    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+  />
+</div>
+
   );
 };
+
+export default Authenticator;
