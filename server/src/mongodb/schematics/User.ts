@@ -20,6 +20,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   image: string;
+  contact: string;
 
   tier: Tier;
   subscriptionId: string | null;
@@ -46,6 +47,7 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     image: { type: String, default: null },
+    contact: { type: String, default: null },
 
     tier: { type: String, enum: Object.values(Tier), default: Tier.Free },
     subscriptionId: { type: String, default: null },

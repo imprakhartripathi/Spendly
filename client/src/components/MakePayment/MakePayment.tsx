@@ -17,6 +17,8 @@ const MakePayment: React.FC = () => {
   const [currentTier, setCurrentTier] = useState<Tier | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const [user, setUser] = useState<any>(null);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -31,9 +33,11 @@ const MakePayment: React.FC = () => {
         },
       })
       .then((res) => {
-        setCurrentTier(res.data.user.tier);
-        setSelectedTier(res.data.user.tier);
-        setUserId(res.data.user._id);
+        const userData = res.data.user;
+        setUser(userData);
+        setCurrentTier(userData.tier);
+        setSelectedTier(userData.tier);
+        setUserId(userData._id);
       })
       .catch(() => alert("Failed to fetch user info"));
   }, []);
@@ -60,7 +64,7 @@ const MakePayment: React.FC = () => {
       const { id: subscription_id } = subsRes.data;
 
       const options = {
-        key: "rzp_test_PBJkLnUbQSrahI",
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         name: "Spendly",
         description: `Upgrade to ${selectedTier}`,
         subscription_id,
@@ -80,10 +84,13 @@ const MakePayment: React.FC = () => {
           setCurrentTier(selectedTier);
         },
         prefill: {
-          email: "",
+          name: user?.fullName || "",
+          email: user?.email || "",
+          contact: user?.contact || "",
         },
+        notes: `Generated Subscription By Spendly User ${user?.fullName}, with user ID: ${user?._id} and Email: ${user?.email}`,
         theme: {
-          color: "#2e97cc",
+          color: "#38b6ff",
         },
       };
 
