@@ -9,7 +9,6 @@ const PLAN_IDS: Record<Tier, string> = {
   premium: PremiumID,
 };
 
-// Create Subscription instead of Order
 export const createSubscription = async (req: Request, res: Response): Promise<void> => {
   // console.log("createSubscription called with body:", req.body);
 
@@ -30,7 +29,7 @@ export const createSubscription = async (req: Request, res: Response): Promise<v
     const subscription = await razorpayInstance.subscriptions.create({
       plan_id: planId,
       customer_notify: 1,
-      total_count: 12, // example: yearly, 12 months
+      total_count: 12, // yearly, 12 months
     });
 
     // console.log("Razorpay subscription created:", subscription);

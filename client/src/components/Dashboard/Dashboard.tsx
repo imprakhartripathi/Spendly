@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
       } catch (err) {
         console.error("Auth failed", err);
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/auth");
       }
     };
 

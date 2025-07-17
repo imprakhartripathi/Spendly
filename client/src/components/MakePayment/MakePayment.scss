@@ -1,39 +1,108 @@
 .payment-container {
+  display: flex;
+  flex-direction: column;
   text-align: center;
   padding: 2rem;
 
+  .img {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+      width: 25%;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: flex;
+      flex-direction: row;
+      justify-content: right;
+      align-items: center;
+      gap: 3%;
+    }
+  }
+
   h1 {
+    font-size: 2rem;
     margin-bottom: 1.5rem;
+    color: #fff;
+  }
+
+  .current-subscription {
+    background: #ffffffaa;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    margin-inline: auto;
+    text-align: left;
+
+    h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin: 0.3rem 0;
+    }
   }
 
   .tier-options {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
   }
 
   .tier-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1rem;
-    width: 150px;
-    cursor: pointer;
-    transition: 0.3s;
     background: #fff;
-
-    &.selected {
-      border-color: #2e97cc;
-      background: #e0f7ff;
-    }
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 1rem;
+    width: 180px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 
     h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
       margin-bottom: 0.5rem;
     }
 
     ul {
+      list-style: none;
+      padding: 0;
       text-align: left;
-      padding-left: 1rem;
+
+      li {
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    .price {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-top: 0.8rem;
+      color: #222;
+    }
+
+    .current-label {
+      background: #38b6ff;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+
+    &.selected {
+      border-color: #38b6ff;
+      background: #e3f7ff;
+      transform: scale(1.05);
     }
   }
 
@@ -41,13 +110,32 @@
     background: #2e97cc;
     color: white;
     border: none;
-    padding: 0.5rem 1.5rem;
-    border-radius: 4px;
+    padding: 0.6rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: 0.3s;
+
+    &:hover:enabled {
+      background-color: #1c7cbf;
+    }
 
     &:disabled {
-      background: #ccc;
+      background: #aaa;
       cursor: not-allowed;
+    }
+  }
+
+  .back-button {
+    background: white;
+    border: 1px solid #1c7cbf !important;
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    &:hover {
+      color: #222;
     }
   }
 }
