@@ -1,111 +1,118 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-
-.auth-container {
-  min-height: 97.5vh;
+.auth-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #d2e3f6 0%, #dce5fc 100%);
+  // height: 100vh;  // full viewport height to eliminate extra scroll
   font-family: 'Inter', sans-serif;
-  border-radius: 12px;
+  overflow: hidden;  // prevents scrollbars from oversized content
 }
 
-.auth-base-card {
-  background: #fff;
-  border-radius: 20px;
-  // padding: 2rem 1.5rem 3rem;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.298);
-  text-align: center;
-  position: relative;
-}
-
-.logo-wrapper {
+.auth-left {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  width: fit-content;
-  margin: 0 auto 0;
+  background: #fff;
+  padding: 2rem 3rem;
+  overflow-y: auto;  // adds scroll only if necessary
 
-  img {
-    width: 200px;
+  .logo {
+    width: 300px;
+    margin-bottom: 1rem;
   }
-}
 
-.auth-layer-card {
-  background: linear-gradient(145deg, #38b6ff, #007cf0);
-  border-radius: 16px;
-  padding: 2rem;
-  color: #fff;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  transition: all 0.5s ease;
+  h1 {
+    font-size: 2rem;
+    color: #007bb5;
+    margin-bottom: 0;
+  }
 
-  h2 {
-    margin-bottom: 1.5rem;
+  p {
+    color: #64748b;
+    margin-bottom: 2rem;
   }
 
   form {
+    width: 100%;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
-    .MuiTextField-root {
-      margin-bottom: 1rem;
-    }
-  }
+    gap: 1rem;
 
-  .MuiInputBase-root {
-    background-color: #fff;
-    border-radius: 8px;
-  }
-  .MuiInputLabel-root {
-    background-color: #fff;
-    padding: 0 4px;
-    border-radius: 4px;
-    // transition: background-color 0.3s ease;
-  }
-  .primary-btn {
-    background: #fff;
-    color: #007cf0;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
-
-    &:hover:enabled {
+    .MuiInputBase-root {
       background: #f1f5f9;
-      transform: translateY(-2px);
+      border-radius: 8px;
     }
 
-    &:disabled {
-      background: #cbd5e1;
-      cursor: not-allowed;
+    .form-extras {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #64748b;
+
+      input[type="checkbox"] {
+        margin-right: 0.5rem;
+      }
+
+      .link-btn {
+        background: none;
+        border: none;
+        color: #007bb5;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 0.85rem;
+      }
     }
-  }
 
-  .auth-toggle {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-
-    button {
-      background: none;
-      border: none;
+    .primary-btn {
+      background: #38b6ff;
       color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
       cursor: pointer;
-      font-weight: 500;
-      text-decoration: underline;
+      transition: background 0.3s ease;
+
+      &:hover:enabled {
+        background: #007bb5;
+      }
+
+      &:disabled {
+        background: #94a3b8;
+      }
+    }
+
+    .auth-toggle {
+      font-size: 0.85rem;
+      text-align: center;
+
+      button {
+        background: none;
+        border: none;
+        color: #007bb5;
+        cursor: pointer;
+        text-decoration: underline;
+      }
     }
   }
 }
 
+.auth-right {
+  flex: 1;
+  // background: linear-gradient(135deg, #38b6ff, #007bb5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  overflow: hidden;  // ensure image doesn't overflow
 
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  .illustration {
+    width: 100%;
+    height: 100%;
+    // object-fit: contain;  // ensures full containment without distortion
+    border-radius: 16px;
+    border: 8px solid white;
+  }
 }

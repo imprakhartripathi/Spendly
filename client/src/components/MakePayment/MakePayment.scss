@@ -3,8 +3,9 @@
 .payment-container {
   font-family: "Inter", sans-serif;
   text-align: center;
-  padding: 3rem 2rem 0 2rem;
-  min-height: 100vh;
+  padding: 2rem 2rem 0 2rem;
+  // min-height: 100vh;
+  height: 93vh;
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #f9fafb 0%, #eef2f7 100%);
@@ -153,13 +154,20 @@
   .current-subscription {
     background: #fff;
     border: 1px solid #e5e7eb;
-    border-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: -12px;
+    border-bottom-right-radius: -12px;
     padding: 1.5rem;
-    max-width: 800px;
+    max-width: 62rem;
     margin: 0 auto 2rem;
-    // margin-bottom: -30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: -30px !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05), 
+            5px 0 15px rgba(0, 0, 0, 0.05), 
+            -5px 0 15px rgba(0, 0, 0, 0.05);
+
     text-align: left;
+    padding-top: 0;
 
     h3 {
       font-weight: 600;
