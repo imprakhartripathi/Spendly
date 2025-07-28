@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 import {
@@ -16,16 +16,38 @@ import { Calendar, TrendingUp, TrendingDown } from "lucide-react";
 import Navbar from "../Navbar/Navbar";
 import "./MonthlySummary.scss";
 
+interface Transaction {
+  _id: string;
+  transectionType: "debit" | "credit";
+  amount: number;
+  category: string;
+  spentOn: string;
+  onDate: string;
+}
+
+interface MonthlyStats {
+  [key: string]: {
+    month: string;
+    income: number;
+    expenses: number;
+    net: number;
+  };
+}
+
+interface CategoryBreakdown {
+  [key: string]: number;
+}
+
 const MonthlySummary: React.FC = () => {
   const { user } = useOutletContext<{ user: any }>();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [searchTerm, setSearchTerm] = useState("");
-  const transactions = user?.transections || [];
+  const transactions: Transaction[] = user?.transections || [];
   const loading = !user;
 
   const getMonthlyData = () => {
-    const monthlyStats = {};
+    const monthlyStats: MonthlyStats = {};
     const currentDate = new Date();
     
     // Initialize last 12 months
@@ -41,7 +63,7 @@ const MonthlySummary: React.FC = () => {
     }
 
     // Process transactions
-    transactions.forEach(txn => {
+    transactions.forEach((txn: Transaction) => {
       const txnDate = new Date(txn.onDate);
       const monthKey = `${txnDate.getFullYear()}-${txnDate.getMonth()}`;
       
@@ -59,23 +81,23 @@ const MonthlySummary: React.FC = () => {
   };
 
   const getCurrentMonthData = () => {
-    const currentMonthTransactions = transactions.filter(txn => {
+    const currentMonthTransactions = transactions.filter((txn: Transaction) => {
       const txnDate = new Date(txn.onDate);
       return txnDate.getMonth() === selectedMonth && txnDate.getFullYear() === selectedYear;
     });
 
     const income = currentMonthTransactions
-      .filter(t => t.transectionType === 'credit')
-      .reduce((sum, t) => sum + t.amount, 0);
+      .filter((t: Transaction) => t.transectionType === 'credit')
+      .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
     
     const expenses = currentMonthTransactions
-      .filter(t => t.transectionType === 'debit')
-      .reduce((sum, t) => sum + t.amount, 0);
+      .filter((t: Transaction) => t.transectionType === 'debit')
+      .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
 
-    const categoryBreakdown = {};
+    const categoryBreakdown: CategoryBreakdown = {};
     currentMonthTransactions
-      .filter(t => t.transectionType === 'debit')
-      .forEach(txn => {
+      .filter((t: Transaction) => t.transectionType === 'debit')
+      .forEach((txn: Transaction) => {
         categoryBreakdown[txn.category] = (categoryBreakdown[txn.category] || 0) + txn.amount;
       });
 

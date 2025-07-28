@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
-import axios from "axios";
-import { backendURL } from "../../app.config";
 import { ArrowUpRight, ArrowDownRight, Filter, Calendar } from "lucide-react";
 import Navbar from "../Navbar/Navbar";
 import "./Transactions.scss";
 
+interface Transaction {
+  _id: string;
+  transectionType: "debit" | "credit";
+  amount: number;
+  category: string;
+  spentOn: string;
+  onDate: string;
+}
+
 const Transactions: React.FC = () => {
   const { user } = useOutletContext<{ user: any }>();
-  const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [filterType, setFilterType] = useState("all");
   const [sortBy, setSortBy] = useState("date");
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,11 +43,11 @@ const Transactions: React.FC = () => {
 
     // Filter by type
     if (filterType !== "all") {
-      filtered = filtered.filter(txn => txn.transectionType === filterType);
+      filtered = filtered.filter((txn: Transaction) => txn.transectionType === filterType);
     }
 
     // Sort transactions
-    filtered.sort((a, b) => {
+    filtered.sort((a: Transaction, b: Transaction) => {
       switch (sortBy) {
         case "date":
           return new Date(b.onDate).getTime() - new Date(a.onDate).getTime();
@@ -120,8 +127,8 @@ const Transactions: React.FC = () => {
           <h3>Total Spent</h3>
           <p className="stat-number expense">
             ₹{filteredTransactions
-              .filter(t => t.transectionType === "debit")
-              .reduce((sum, t) => sum + t.amount, 0)
+              .filter((t: Transaction) => t.transectionType === "debit")
+              .reduce((sum: number, t: Transaction) => sum + t.amount, 0)
               .toLocaleString()}
           </p>
         </div>
@@ -129,8 +136,8 @@ const Transactions: React.FC = () => {
           <h3>Total Income</h3>
           <p className="stat-number income">
             ₹{filteredTransactions
-              .filter(t => t.transectionType === "credit")
-              .reduce((sum, t) => sum + t.amount, 0)
+              .filter((t: Transaction) => t.transectionType === "credit")
+              .reduce((sum: number, t: Transaction) => sum + t.amount, 0)
               .toLocaleString()}
           </p>
         </div>
@@ -147,7 +154,7 @@ const Transactions: React.FC = () => {
             <p>No transactions found</p>
           </div>
         ) : (
-          filteredTransactions.map((txn, index) => (
+          filteredTransactions.map((txn: Transaction, index: number) => (
             <motion.div 
               key={txn._id} 
               className="transaction-card"

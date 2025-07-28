@@ -47,7 +47,7 @@ const Settings: React.FC = () => {
     }));
   };
 
-  const handleNotificationChange = (key: string) => {
+  const handleNotificationChange = (key: keyof typeof notifications) => {
     setNotifications(prev => ({
       ...prev,
       [key]: !prev[key]
@@ -257,7 +257,7 @@ const Settings: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={value}
-                        onChange={() => handleNotificationChange(key)}
+                        onChange={() => handleNotificationChange(key as keyof typeof notifications)}
                       />
                       <span className="slider"></span>
                     </label>
