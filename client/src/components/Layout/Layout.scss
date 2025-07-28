@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$background-light: #f9fafb;
+$text-secondary: #6b7280;
+
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  background: $background-light;
+  font-family: "Inter", sans-serif;
+}
+
+.layout-main {
+  flex: 1;
+  margin-left: 280px;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.layout-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: "Inter", sans-serif;
+
+  .loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(56, 182, 255, 0.1);
+    border-top: 4px solid $primary-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 1rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .layout-main {
+    margin-left: 0;
+  }
+}

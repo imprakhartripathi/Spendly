@@ -18,9 +18,11 @@
     "dompurify": "^3.2.6",
     "dotenv": "^17.0.1",
     "framer-motion": "^12.23.0",
+    "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
+    "recharts": "^3.1.0",
     "sass": "^1.89.2"
   },
   "devDependencies": {

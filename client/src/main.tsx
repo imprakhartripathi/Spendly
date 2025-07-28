@@ -8,10 +8,15 @@ import {
   useNavigate,
 } from "react-router-dom";
 import Authenticator from "./components/Authenticator/Authenticator";
-
 import NotFound from "./components/NotFound/NotFound";
 import Dashboard from "./components/Dashboard/Dashboard";
 import MakePayment from "./components/MakePayment/MakePayment";
+import Transactions from "./components/Transactions/Transactions";
+import MonthlySummary from "./components/MonthlySummary/MonthlySummary";
+import Settings from "./components/Settings/Settings";
+import CategoryTrends from "./components/CategoryTrends/CategoryTrends";
+import AutoPays from "./components/AutoPays/AutoPays";
+import Layout from "./components/Layout/Layout";
 
 // Protected layout to dynamically redirect
 const ProtectedLayout: React.FC = () => {
@@ -46,12 +51,37 @@ const router = createBrowserRouter([
     element: <ProtectedLayout />, // wrapper layout for protected routes
     children: [
       {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-      {
-        path: "/pay",
-        element: <MakePayment />,
+        element: <Layout />, // Layout with sidebar
+        children: [
+          {
+            path: "/dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/transactions",
+            element: <Transactions />,
+          },
+          {
+            path: "/monthly-summary",
+            element: <MonthlySummary />,
+          },
+          {
+            path: "/category-trends",
+            element: <CategoryTrends />,
+          },
+          {
+            path: "/autopays",
+            element: <AutoPays />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
+          },
+          {
+            path: "/payment",
+            element: <MakePayment />,
+          },
+        ],
       },
     ],
   },

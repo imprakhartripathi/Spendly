@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+.category-trends-page {
+  padding: 0 2rem 2rem;
+  font-family: "Inter", sans-serif;
+
+  .page-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  .coming-soon {
+    background: $white;
+    border-radius: 20px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: $shadow-lg;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 1rem 0;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+}

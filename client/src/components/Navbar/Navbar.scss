@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables (from payment page)
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$background-secondary: #eef2f7;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+  gap: 2rem;
+  // padding: 0 2rem;
+
+  .navbar-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    // .navbar-logo {
+    //   .logo-image {
+    //     height: 40px;
+    //     width: auto;
+    //     object-fit: contain;
+    //   }
+    // }
+
+    .navbar-content {
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 0.5rem 0;
+        background: linear-gradient(135deg, $text-primary, $text-secondary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .search-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      svg {
+        position: absolute;
+        left: 1rem;
+        color: $text-muted;
+        z-index: 2;
+      }
+
+      input {
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid $border-light;
+        border-radius: 12px;
+        background: $white;
+        font-size: 0.875rem;
+        width: 280px;
+        transition: all 0.3s ease;
+        box-shadow: $shadow-sm;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-blue;
+          box-shadow: 0 0 0 3px rgba(56, 182, 255, 0.1);
+          transform: translateY(-1px);
+        }
+
+        &::placeholder {
+          color: $text-muted;
+        }
+      }
+    }
+
+    .notification-btn {
+      position: relative;
+      padding: 0.75rem;
+      background: $white;
+      border: 1px solid $border-light;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: $shadow-sm;
+      color: $text-secondary;
+
+      &:hover {
+        background: $primary-blue;
+        color: $white;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+      }
+
+      .notification-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background: $danger;
+        color: $white;
+        font-size: 0.625rem;
+        font-weight: 600;
+        padding: 0.125rem 0.375rem;
+        border-radius: 10px;
+        min-width: 18px;
+        text-align: center;
+      }
+    }
+
+    .add-transaction-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, $primary-blue, $secondary-blue);
+      color: $white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: $shadow-md;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+
+    .navbar-right {
+      justify-content: space-between;
+
+      .search-container input {
+        width: 200px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    .navbar-right {
+      flex-wrap: wrap;
+
+      .search-container input {
+        width: 100%;
+      }
+    }
+  }
+}

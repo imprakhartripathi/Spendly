@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { backendURL } from "../../app.config";
 import "./MakePayment.scss";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
-import logo from "../../assets/logo.png";
+import { CreditCard, Check, Star } from "lucide-react";
 
 const TIERS = ["free", "plus", "premium"] as const;
 type Tier = (typeof TIERS)[number];
@@ -35,39 +35,22 @@ const TIER_FEATURES: Record<Tier, string[]> = {
 
 
 const MakePayment: React.FC = () => {
+  const { user } = useOutletContext<{ user: any }>();
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [currentTier, setCurrentTier] = useState<Tier | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [userLoading, setUserLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("No token found. Please login again.");
-      return;
+    if (user) {
+      setCurrentTier(user.tier);
+      setSelectedTier(user.tier);
     }
-
-    axios
-      .get(`${backendURL}/getuserinfo`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const userData = res.data.user;
-        setUser(userData);
-        setCurrentTier(userData.tier);
-        setSelectedTier(userData.tier);
-        setUserId(userData._id);
-      })
-      .catch(() => alert("Failed to fetch user info"))
-      .finally(() => setUserLoading(false));
-  }, []);
+  }, [user]);
 
   const handleContinue = async () => {
     const token = localStorage.getItem("token");
-    if (!token || !selectedTier || !userId) return;
+    if (!token || !selectedTier || !user?._id) return;
 
     if (selectedTier === "free") {
       const confirmed = window.confirm(
@@ -81,7 +64,7 @@ const MakePayment: React.FC = () => {
 
       setLoading(true);
       await axios.post(
-        `${backendURL}/cancel-subs/${userId}`,
+        `${backendURL}/cancel-subs/${user._id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,13 +83,13 @@ const MakePayment: React.FC = () => {
       const { id: subscription_id } = subsRes.data;
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        key: import.meta.env.RAZORPAY_KEY_ID,
         name: "Spendly",
         description: `Upgrade to ${selectedTier}`,
         subscription_id,
         handler: async function (response: any) {
           await axios.post(
-            `${backendURL}/verify-payment/${userId}`,
+            `${backendURL}/verify-payment/${user._id}`,
             {
               razorpay_subscription_id: response.razorpay_subscription_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -172,11 +155,11 @@ const MakePayment: React.FC = () => {
 
 
   const isButtonDisabled = () => {
-    if (loading || !selectedTier || !userId) return true;
+    if (loading || !selectedTier || !user?._id) return true;
     return user?.tier === selectedTier;
   };
 
-  if (userLoading) {
+  if (!user) {
     return (
       <div className="loader-container">
         <div className="loader"></div>
@@ -186,86 +169,133 @@ const MakePayment: React.FC = () => {
   }
 
   return (
-    <motion.div
-      className="payment-container"
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="img">
-        <img src={logo} alt="Logo" className="logo" />
-        <div className="btn">
-          <button onClick={handleContinue} disabled={isButtonDisabled()}>
-            {getButtonLabel()}
-          </button>
-          <button className="back-button" onClick={() => navigate("/")}>
-            Home
-          </button>
-        </div>
-      </div>
-
-      <div className="tier-options">
-        {TIERS.map((tier) => (
-          <motion.div
-            key={tier}
-            onClick={() => setSelectedTier(tier)}
-            className={`tier-card ${selectedTier === tier ? "selected" : ""}`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <h2>{capitalize(tier)}</h2>
-            <p className="price">
-              {tier === "free"
-                ? "₹0 / month"
-                : `₹${tier === "plus" ? 99 : 199} / month`}
-            </p>
-
-            <ul>
-              {TIER_FEATURES[tier].map((feature, idx) => (
-                <li key={idx}>{feature}</li>
-              ))}
-            </ul>
-            {currentTier === tier && (
-              <span className="current-label">Current Plan</span>
-            )}
-          </motion.div>
-        ))}
-      </div>
-
-      {user && (
+    <div className="payment-container">
+      <motion.main 
+        className="main-content"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
         <motion.div
-          className="current-subscription"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <h3>Subscription Details</h3>
-          <div className="subscription-grid">
-            <div>
-              <strong>Name:</strong> {user.fullName}
+          <div className="page-header">
+            <div className="header-content">
+              <h1>
+                <CreditCard className="header-icon" />
+                Subscription Plans
+              </h1>
+              <p>Choose the perfect plan for your financial journey</p>
             </div>
-            <div>
-              <strong>Email:</strong> {user.email}
-            </div>
-            <div>
-              <strong>Contact:</strong> {user.contact || "N/A"}
-            </div>
-            <div>
-              <strong>Current Plan:</strong> {capitalize(user.tier)}
-            </div>
-            <div>
-              <strong>Subscription ID:</strong> {user.subscriptionId || "N/A"}
-            </div>
-            <div>
-              <strong>Payment ID:</strong> {user.paymentId || "N/A"}
-            </div>
-            <div>
-              <strong>Next Due Date:</strong> {getReadableDate(user.expiresAt)}
+            <div className="header-actions">
+              <button 
+                className="primary-button"
+                onClick={handleContinue} 
+                disabled={isButtonDisabled()}
+              >
+                {getButtonLabel()}
+              </button>
+              <button 
+                className="secondary-button" 
+                onClick={() => navigate("/dashboard")}
+              >
+                Back to Dashboard
+              </button>
             </div>
           </div>
+
+          <div className="tier-options">
+            {TIERS.map((tier, index) => (
+              <motion.div
+                key={tier}
+                onClick={() => setSelectedTier(tier)}
+                className={`tier-card ${selectedTier === tier ? "selected" : ""} ${currentTier === tier ? "current" : ""}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                {currentTier === tier && (
+                  <div className="current-bookmark">
+                    <span>Current Plan</span>
+                  </div>
+                )}
+                
+                <div className="tier-header">
+                  <div className="tier-icon">
+                    {tier === "free" && <Check size={24} />}
+                    {tier === "plus" && <Star size={24} />}
+                    {tier === "premium" && <CreditCard size={24} />}
+                  </div>
+                  <h2>{capitalize(tier)}</h2>
+                </div>
+                
+                <div className="tier-price">
+                  <span className="currency">₹</span>
+                  <span className="amount">
+                    {tier === "free" ? "0" : tier === "plus" ? "99" : "199"}
+                  </span>
+                  <span className="period">/ month</span>
+                </div>
+
+                <ul className="tier-features">
+                  {TIER_FEATURES[tier].map((feature, idx) => (
+                    <li key={idx}>
+                      <Check size={16} className="feature-check" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          {user && (
+            <motion.div
+              className="subscription-details"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h3>Account Information</h3>
+              <div className="details-grid">
+                <div className="detail-item">
+                  <span className="label">Name:</span>
+                  <span className="value">{user.fullName}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Email:</span>
+                  <span className="value">{user.email}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Contact:</span>
+                  <span className="value">{user.contact || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Current Plan:</span>
+                  <span className="value plan-badge">{capitalize(user.tier)}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Subscription ID:</span>
+                  <span className="value">{user.subscriptionId || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Payment ID:</span>
+                  <span className="value">{user.paymentId || "N/A"}</span>
+                </div>
+                <div className="detail-item">
+                  <span className="label">Next Due Date:</span>
+                  <span className="value">{getReadableDate(user.expiresAt)}</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
-      )}
-    </motion.div>
+      </motion.main>
+    </div>
   );
 };
 

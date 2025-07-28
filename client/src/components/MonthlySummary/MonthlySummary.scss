@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$background-secondary: #eef2f7;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+.monthly-summary-page {
+  padding: 0 2rem 2rem;
+  font-family: "Inter", sans-serif;
+
+  .monthly-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 2rem;
+
+    .header-left {
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 0.5rem 0;
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
+
+    .month-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: $white;
+      border: 1px solid $border-light;
+      border-radius: 12px;
+      box-shadow: $shadow-sm;
+
+      svg {
+        color: $text-muted;
+      }
+
+      select {
+        border: none;
+        background: transparent;
+        font-size: 0.875rem;
+        color: $text-primary;
+        cursor: pointer;
+        margin-left: 0.5rem;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .monthly-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .stat-card {
+      background: $white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: $shadow-lg;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: $shadow-xl;
+      }
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+      }
+
+      .stat-content {
+        flex: 1;
+
+        h3 {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $text-secondary;
+          margin: 0 0 0.5rem 0;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $text-primary;
+          margin: 0 0 0.25rem 0;
+        }
+
+        .stat-change {
+          font-size: 0.75rem;
+          font-weight: 500;
+          padding: 0.125rem 0.5rem;
+          border-radius: 6px;
+
+          &.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: $success;
+          }
+
+          &.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: $danger;
+          }
+        }
+      }
+
+      &.income .stat-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+
+      &.expenses .stat-icon {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+
+      &.net .stat-icon {
+        background: linear-gradient(135deg, $primary-blue, $secondary-blue);
+      }
+    }
+  }
+
+  .charts-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    .chart-card {
+      background: $white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: $shadow-lg;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: $shadow-xl;
+      }
+
+      h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 0 0 1.5rem 0;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+}
+
+.monthly-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  font-family: "Inter", sans-serif;
+
+  .loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(56, 182, 255, 0.1);
+    border-top: 4px solid $primary-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 1rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .monthly-summary-page {
+    padding: 1rem;
+
+    .monthly-header {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .monthly-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .charts-section {
+      grid-template-columns: 1fr;
+    }
+  }
+}
