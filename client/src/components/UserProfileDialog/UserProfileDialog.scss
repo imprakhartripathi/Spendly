@@ -1,0 +1,368 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$danger: #ef4444;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+
+  .profile-dialog {
+    background: $white;
+    border-radius: 20px;
+    box-shadow: $shadow-xl;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    font-family: "Inter", sans-serif;
+
+    &.open {
+      transform: translateX(0);
+    }
+
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid $border-light;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: $text-secondary;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: $danger;
+        }
+      }
+    }
+
+    .profile-content {
+      padding: 2rem;
+
+      .profile-avatar-section {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid $border-light;
+
+        .avatar-container {
+          position: relative;
+
+          .avatar-image,
+          .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          .avatar-placeholder {
+            background: $background-light;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $text-secondary;
+            border: 2px solid $border-light;
+          }
+
+          .avatar-edit-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: $primary-blue;
+            color: $white;
+            border: 2px solid $white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: $secondary-blue;
+              transform: scale(1.1);
+            }
+          }
+        }
+
+        .user-info {
+          flex: 1;
+
+          h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin: 0 0 0.5rem 0;
+          }
+
+          .tier-badge-container {
+            .tier-badge {
+              display: inline-flex;
+              align-items: center;
+              gap: 0.5rem;
+              padding: 0.5rem 1rem;
+              border-radius: 12px;
+              font-size: 0.875rem;
+              font-weight: 600;
+              background: rgba(56, 182, 255, 0.1);
+              border: 1px solid rgba(56, 182, 255, 0.2);
+
+              &.free {
+                background: rgba(107, 114, 128, 0.1);
+                border-color: rgba(107, 114, 128, 0.2);
+              }
+
+              &.plus {
+                background: rgba(16, 185, 129, 0.1);
+                border-color: rgba(16, 185, 129, 0.2);
+              }
+
+              &.premium {
+                background: rgba(56, 182, 255, 0.1);
+                border-color: rgba(56, 182, 255, 0.2);
+              }
+            }
+          }
+        }
+      }
+
+      .profile-form {
+        .form-section {
+          margin-bottom: 2rem;
+
+          h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin: 0 0 1rem 0;
+          }
+
+          .form-group {
+            margin-bottom: 1rem;
+
+            label {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              font-size: 0.875rem;
+              font-weight: 500;
+              color: $text-primary;
+              margin-bottom: 0.5rem;
+
+              svg {
+                color: $primary-blue;
+              }
+            }
+
+            input {
+              width: 100%;
+              padding: 0.75rem 1rem;
+              border: 1px solid $border-light;
+              border-radius: 12px;
+              font-size: 0.875rem;
+              font-family: "Inter", sans-serif;
+              transition: all 0.3s ease;
+              background: $white;
+
+              &:focus {
+                outline: none;
+                border-color: $primary-blue;
+                box-shadow: 0 0 0 3px rgba(56, 182, 255, 0.1);
+              }
+
+              &::placeholder {
+                color: $text-muted;
+              }
+            }
+          }
+
+          .account-details {
+            .detail-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 0.75rem 0;
+              border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+
+              &:last-child {
+                border-bottom: none;
+              }
+
+              .label {
+                font-size: 0.875rem;
+                color: $text-secondary;
+                font-weight: 500;
+              }
+
+              .value {
+                font-size: 0.875rem;
+                color: $text-primary;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        .error-message {
+          background: rgba(239, 68, 68, 0.1);
+          color: $danger;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          margin-bottom: 1rem;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .success-message {
+          background: rgba(16, 185, 129, 0.1);
+          color: $success;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          margin-bottom: 1rem;
+          border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .form-actions {
+          display: flex;
+          gap: 1rem;
+          justify-content: flex-end;
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid $border-light;
+
+          button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+          }
+
+          .cancel-btn {
+            background: transparent;
+            color: $text-secondary;
+            border: 1px solid $border-light;
+
+            &:hover:not(:disabled) {
+              background: $background-light;
+              color: $text-primary;
+            }
+          }
+
+          .save-btn {
+            background: $primary-blue;
+            color: $white;
+            border: none;
+
+            &:hover:not(:disabled) {
+              background: $secondary-blue;
+              transform: translateY(-1px);
+              box-shadow: $shadow-lg;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 640px) {
+  .profile-overlay {
+    padding: 0.5rem;
+
+    .profile-dialog {
+      max-width: 100%;
+      border-radius: 16px;
+      max-height: 95vh;
+
+      .dialog-header {
+        padding: 1rem 1.5rem;
+
+        h2 {
+          font-size: 1.25rem;
+        }
+      }
+
+      .profile-content {
+        padding: 1.5rem;
+
+        .profile-avatar-section {
+          flex-direction: column;
+          text-align: center;
+          gap: 1rem;
+
+          .user-info {
+            h3 {
+              font-size: 1.25rem;
+            }
+          }
+        }
+
+        .profile-form {
+          .form-actions {
+            flex-direction: column;
+
+            button {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

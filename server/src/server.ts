@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { router } from "./router";
 import { connectMongoDB } from "./mongodb/mongodb.config";
 import { backupPort, corsConfig } from "./app.config";
+import { initializeAutopayJobs } from "./controllers/autopay.controller";
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router);
 
 connectMongoDB();
+
+// Initialize autopay cron jobs
+initializeAutopayJobs();
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);

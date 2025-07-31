@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User, { IUser } from "../mongodb/schematics/User";
 import { generateISTTimestamp, jwtKey } from "../app.config";
-import { sendWelcomeEmail } from "./notification.controller";
+import { sendWelcomeEmail, sendLoginEmail } from "../services/email.service";
 import { NotificationType } from "../mongodb/schematics/Notifications";
 
 export const signup = async (
@@ -87,7 +87,7 @@ export const login = async (
     const token = jwt.sign({ email, id: user._id }, jwtKey, jwtOptions);
     const loginTime = generateISTTimestamp();
 
-    await sendWelcomeEmail(
+    await sendLoginEmail(
       user.fullName,
       email,
       loginTime,

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 import { ArrowUpRight, ArrowDownRight, Filter, Calendar } from "lucide-react";
 import Navbar from "../Navbar/Navbar";
+import TransactionDetailDialog from "../TransactionDetailDialog/TransactionDetailDialog";
 import "./Transactions.scss";
 
 interface Transaction {
@@ -11,17 +12,19 @@ interface Transaction {
   amount: number;
   category: string;
   spentOn: string;
+  spentOnDesc: string;
   onDate: string;
 }
 
 const Transactions: React.FC = () => {
-  const { user } = useOutletContext<{ user: any }>();
+  const { user, refreshUser } = useOutletContext<{ user: any; refreshUser: () => void }>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
   const [filterType, setFilterType] = useState("all");
   const [sortBy, setSortBy] = useState("date");
-  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [showTransactionDetail, setShowTransactionDetail] = useState(false);
 
   useEffect(() => {
     fetchTransactions();
@@ -63,6 +66,16 @@ const Transactions: React.FC = () => {
     setFilteredTransactions(filtered);
   };
 
+  const handleTransactionClick = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setShowTransactionDetail(true);
+  };
+
+  const handleTransactionUpdate = () => {
+    refreshUser();
+    fetchTransactions();
+  };
+
   if (loading) {
     return (
       <div className="transactions-loading">
@@ -79,7 +92,7 @@ const Transactions: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Navbar user={user} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Navbar user={user} onRefresh={refreshUser} />
       <div className="transactions-header">
         <div className="header-left">
           <h1>All Transactions</h1>
@@ -162,6 +175,8 @@ const Transactions: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 * index + 0.5 }}
               whileHover={{ x: 5, scale: 1.01 }}
+              onClick={() => handleTransactionClick(txn)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="transaction-icon">
                 <div className={`icon-wrapper ${txn.transectionType}`}>
@@ -185,6 +200,14 @@ const Transactions: React.FC = () => {
           ))
         )}
       </motion.div>
+
+      <TransactionDetailDialog
+        isOpen={showTransactionDetail}
+        onClose={() => setShowTransactionDetail(false)}
+        transaction={selectedTransaction}
+        userId={user._id}
+        onUpdate={handleTransactionUpdate}
+      />
     </motion.div>
   );
 };

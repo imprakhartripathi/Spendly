@@ -1,7 +1,12 @@
 import { NotificationType } from "../mongodb/schematics/Notifications";
 import User, { IUser } from "../mongodb/schematics/User";
-import { sendAutopayReminderEmail, sendLargeTransectionEmail, sendLowBalanceEmail, sendSignificantTransectionEmail, 
-    sendVeryLargeTransectionEmail } from "./notification.controller";
+import { 
+  sendAutopayReminderEmail, 
+  sendLargeTransectionEmail, 
+  sendLowBalanceEmail, 
+  sendSignificantTransectionEmail,
+  sendVeryLargeTransectionEmail 
+} from "../services/email.service";
 
 export async function assessTransactionAndNotify(
   name: string,

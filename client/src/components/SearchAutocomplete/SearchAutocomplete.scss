@@ -1,0 +1,325 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$danger: #ef4444;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+.search-autocomplete {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  font-family: "Inter", sans-serif;
+
+  .search-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: $white;
+    border: 1px solid $border-light;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+
+    &:focus-within {
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 3px rgba(56, 182, 255, 0.1);
+    }
+
+    svg {
+      color: $text-secondary;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 0.875rem;
+      color: $text-primary;
+      background: transparent;
+      font-family: "Inter", sans-serif;
+
+      &::placeholder {
+        color: $text-muted;
+      }
+    }
+
+    .search-loading {
+      margin-left: 0.5rem;
+      
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid $border-light;
+        border-top: 2px solid $primary-blue;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  .search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: $white;
+    border: 1px solid $border-light;
+    border-radius: 12px;
+    box-shadow: $shadow-xl;
+    z-index: 9998;
+    margin-top: 0.5rem;
+    max-height: 400px;
+    overflow: hidden;
+
+    &.no-results {
+      .no-results-message {
+        padding: 1rem;
+        text-align: center;
+        color: $text-secondary;
+        font-size: 0.875rem;
+      }
+    }
+
+    .search-results-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid $border-light;
+      background: $background-light;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .search-results {
+      max-height: 320px;
+      overflow-y: auto;
+
+      .search-result-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background: $background-light;
+          transform: translateX(4px);
+        }
+
+        .transaction-icon {
+          margin-right: 1rem;
+          flex-shrink: 0;
+
+          .icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $white;
+
+            &.debit {
+              background: linear-gradient(135deg, #ef4444, #dc2626);
+            }
+
+            &.credit {
+              background: linear-gradient(135deg, #10b981, #059669);
+            }
+          }
+        }
+
+        .transaction-details {
+          flex: 1;
+          min-width: 0;
+
+          .transaction-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .transaction-meta {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            margin-bottom: 0.25rem;
+          }
+
+          .transaction-description {
+            font-size: 0.75rem;
+            color: $text-muted;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .transaction-amount {
+          font-size: 0.875rem;
+          font-weight: 600;
+          margin-left: 1rem;
+          flex-shrink: 0;
+
+          &.debit {
+            color: $danger;
+          }
+
+          &.credit {
+            color: $success;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .search-autocomplete {
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+
+    .search-input {
+      padding: 0.625rem 0.875rem;
+      font-size: 16px; // Prevent zoom on iOS
+      border-radius: 12px;
+    }
+
+    .search-dropdown {
+      left: 0;
+      right: 0;
+      width: auto;
+      margin: 0 -1rem;
+      border-radius: 0 0 16px 16px;
+      max-height: 60vh;
+
+      .search-results {
+        max-height: 50vh;
+
+        .search-result-item {
+          padding: 0.875rem 1rem;
+          min-height: 60px;
+
+          .transaction-icon {
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+
+            .icon-wrapper {
+              width: 36px;
+              height: 36px;
+            }
+          }
+
+          .transaction-details {
+            flex: 1;
+            min-width: 0;
+
+            .transaction-title {
+              font-size: 0.875rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .transaction-meta {
+              font-size: 0.75rem;
+              margin-top: 0.125rem;
+            }
+
+            .transaction-description {
+              font-size: 0.7rem;
+              margin-top: 0.125rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+
+          .transaction-amount {
+            font-size: 0.875rem;
+            margin-left: 0.75rem;
+            flex-shrink: 0;
+            text-align: right;
+            min-width: fit-content;
+          }
+        }
+
+        .no-results {
+          padding: 1.5rem 1rem;
+          font-size: 0.875rem;
+        }
+
+        .loading {
+          padding: 1.5rem 1rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .search-autocomplete {
+    .search-input {
+      padding: 0.5rem 0.75rem;
+      font-size: 16px;
+    }
+
+    .search-dropdown {
+      .search-results {
+        .search-result-item {
+          padding: 0.75rem 0.875rem;
+
+          .transaction-icon {
+            .icon-wrapper {
+              width: 32px;
+              height: 32px;
+            }
+          }
+
+          .transaction-details {
+            .transaction-title {
+              font-size: 0.8rem;
+            }
+
+            .transaction-meta,
+            .transaction-description {
+              font-size: 0.7rem;
+            }
+          }
+
+          .transaction-amount {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}

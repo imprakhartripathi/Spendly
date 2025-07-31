@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -13,15 +13,30 @@ import {
   Star,
   Crown,
 } from "lucide-react";
+import UserProfileDialog from "../UserProfileDialog/UserProfileDialog";
 import "./Sidebar.scss";
 
 interface SidebarProps {
   user: any;
+  onUserUpdate?: () => void;
+  isMobileMenuOpen?: boolean;
+  onMobileMenuClose?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ user }) => {
+const Sidebar: React.FC<SidebarProps> = ({ user, onUserUpdate, isMobileMenuOpen, onMobileMenuClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const sidebarItems = [
     { id: "dashboard", icon: TrendingUp, label: "Dashboard", path: "/dashboard" },
@@ -44,6 +59,10 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
       handleLogout();
     } else {
       navigate(item.path);
+    }
+    // Close mobile menu after navigation
+    if (onMobileMenuClose) {
+      onMobileMenuClose();
     }
   };
 
@@ -68,10 +87,12 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
 
   return (
     <motion.aside 
-      className="sidebar"
-      initial={{ x: -250 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}
+      initial={{ x: isMobile ? -280 : -250 }}
+      animate={{ 
+        x: isMobile ? (isMobileMenuOpen ? 0 : -280) : 0 
+      }}
+      transition={{ duration: isMobile ? 0.3 : 0.5, ease: "easeOut" }}
     >
       <motion.div 
         className="sidebar-header"
@@ -126,7 +147,13 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="user-info">
+        <motion.div 
+          className="user-info"
+          onClick={() => setShowProfileDialog(true)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="user-avatar">
             <User size={16} />
           </div>
@@ -134,8 +161,15 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             <span className="user-name">{user.fullName}</span>
             <span className="user-email">{user.email}</span>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
+
+      <UserProfileDialog
+        isOpen={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+        user={user}
+        onUpdate={onUserUpdate || (() => window.location.reload())}
+      />
     </motion.aside>
   );
 };

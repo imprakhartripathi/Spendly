@@ -256,9 +256,61 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    z-index: 100;
 
-    &.open {
+    &.mobile-open {
       transform: translateX(0);
+    }
+  }
+}
+
+// Additional mobile optimizations
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+    max-width: 320px;
+    
+    .sidebar-header {
+      padding: 1.5rem 1rem 1rem;
+      
+      .logo-container .logo-icon {
+        width: 100px;
+        height: 32px;
+      }
+    }
+
+    .sidebar-nav {
+      padding: 0.5rem 0;
+      
+      .nav-item {
+        margin: 0.125rem 0.75rem;
+        
+        .nav-item-content {
+          padding: 0.75rem 0.875rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .sidebar-footer {
+      padding: 1rem;
+      
+      .user-info {
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+        }
+        
+        .user-details {
+          .user-name {
+            font-size: 0.8rem;
+          }
+          
+          .user-email {
+            font-size: 0.7rem;
+          }
+        }
+      }
     }
   }
 }

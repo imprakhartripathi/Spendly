@@ -1,0 +1,332 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$danger: #ef4444;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+.transaction-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+
+  .transaction-form-modal {
+    background: $white;
+    border-radius: 20px;
+    box-shadow: $shadow-xl;
+    width: 100%;
+    max-width: 750px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid $border-light;
+      flex-shrink: 0;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: $text-secondary;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: $danger;
+        }
+      }
+    }
+
+    .transaction-form {
+      padding: 2rem;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        @media (max-width: 640px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+
+        label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: $text-primary;
+          margin-bottom: 0.5rem;
+
+          svg {
+            color: $primary-blue;
+          }
+        }
+
+        input,
+        select,
+        textarea {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 1px solid $border-light;
+          border-radius: 12px;
+          font-size: 0.875rem;
+          font-family: "Inter", sans-serif;
+          transition: all 0.3s ease;
+          background: $white;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-blue;
+            box-shadow: 0 0 0 3px rgba(56, 182, 255, 0.1);
+          }
+
+          &::placeholder {
+            color: $text-muted;
+          }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+
+        select {
+          cursor: pointer;
+        }
+      }
+
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        color: $danger;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid $border-light;
+        flex-shrink: 0;
+
+        button {
+          padding: 0.75rem 1.5rem;
+          border-radius: 12px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+
+        .cancel-btn {
+          background: transparent;
+          color: $text-secondary;
+          border: 1px solid $border-light;
+
+          &:hover:not(:disabled) {
+            background: $background-light;
+            color: $text-primary;
+          }
+        }
+
+        .save-btn {
+          background: $primary-blue;
+          color: $white;
+          border: none;
+
+          &:hover:not(:disabled) {
+            background: $secondary-blue;
+            transform: translateY(-1px);
+            box-shadow: $shadow-lg;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 640px) {
+  .transaction-form-overlay {
+    padding: 0;
+    align-items: flex-end;
+
+    .transaction-form-modal {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      border-radius: 20px 20px 0 0;
+      max-height: 90vh;
+      overflow-y: auto;
+
+      .form-header {
+        padding: 1rem 1.5rem;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+        border-bottom: 1px solid #e5e7eb;
+
+        h2 {
+          font-size: 1.25rem;
+        }
+
+        .close-btn {
+          min-width: 40px;
+          min-height: 40px;
+        }
+      }
+
+      .transaction-form {
+        padding: 1.5rem;
+
+        .form-group {
+          margin-bottom: 1.25rem;
+
+          label {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+          }
+
+          input, select, textarea {
+            padding: 0.75rem;
+            font-size: 16px; // Prevent zoom on iOS
+            border-radius: 12px;
+          }
+
+          textarea {
+            min-height: 80px;
+          }
+        }
+
+        .form-row {
+          flex-direction: column;
+          gap: 1.25rem;
+
+          .form-group {
+            width: 100%;
+          }
+        }
+
+        .form-actions {
+          flex-direction: column;
+          gap: 0.75rem;
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid #e5e7eb;
+
+          button {
+            width: 100%;
+            justify-content: center;
+            padding: 0.875rem;
+            font-size: 0.9rem;
+            min-height: 48px;
+          }
+
+          .cancel-btn {
+            order: 2;
+          }
+
+          .submit-btn {
+            order: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .transaction-form-overlay {
+    .transaction-form-modal {
+      .form-header {
+        padding: 0.875rem 1.25rem;
+
+        h2 {
+          font-size: 1.125rem;
+        }
+      }
+
+      .transaction-form {
+        padding: 1.25rem;
+
+        .form-group {
+          margin-bottom: 1rem;
+
+          input, select, textarea {
+            padding: 0.625rem;
+          }
+        }
+
+        .form-actions {
+          button {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}

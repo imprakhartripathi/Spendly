@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import "./CategoryTrends.scss";
 
 const CategoryTrends: React.FC = () => {
-  const { user } = useOutletContext<{ user: any }>();
-  const [searchTerm, setSearchTerm] = useState("");
+  const { user, refreshUser } = useOutletContext<{ user: any; refreshUser: () => void }>();
 
   return (
     <motion.div 
@@ -15,7 +14,7 @@ const CategoryTrends: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Navbar user={user} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Navbar user={user} onRefresh={refreshUser} />
       <div className="page-header">
         <h1>Category Trends</h1>
         <p>Analyze your spending patterns across different categories</p>

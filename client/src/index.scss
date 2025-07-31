@@ -1,6 +1,78 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+// Global mobile-first styles
+* {
+  box-sizing: border-box;
+}
+
+html {
+  // Prevent zoom on input focus on iOS
+  -webkit-text-size-adjust: 100%;
+  // Smooth scrolling
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: 'Inter', sans-serif !important;
+  margin: 0;
+  padding: 0;
+  // Prevent horizontal scroll
+  overflow-x: hidden;
+  // Better font rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Global responsive utilities
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+// Touch-friendly button sizes
+button, .btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+// Better form controls on mobile
+input, select, textarea {
+  // Prevent zoom on iOS
+  font-size: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 16px; // Prevent zoom
+  }
+}
+
+// Responsive breakpoints
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+  
+  // Better spacing on mobile
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  // Smaller text on very small screens
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  h3 { font-size: 1.125rem !important; }
 }

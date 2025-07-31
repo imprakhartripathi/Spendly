@@ -39,10 +39,9 @@ interface CategoryBreakdown {
 }
 
 const MonthlySummary: React.FC = () => {
-  const { user } = useOutletContext<{ user: any }>();
+  const { user, refreshUser } = useOutletContext<{ user: any; refreshUser: () => void }>();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [searchTerm, setSearchTerm] = useState("");
   const transactions: Transaction[] = user?.transections || [];
   const loading = !user;
 
@@ -134,7 +133,7 @@ const MonthlySummary: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Navbar user={user} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Navbar user={user} onRefresh={refreshUser} />
       <div className="monthly-header">
         <div className="header-left">
           <h1>Monthly Summary</h1>

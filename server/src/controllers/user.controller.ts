@@ -16,6 +16,8 @@ export const updateUser = async (
       "fullName",
       "email",
       "password",
+      "contact",
+      "image",
       "income",
       "monthlyBudget",
       "tier",

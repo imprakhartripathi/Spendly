@@ -48,9 +48,77 @@ $text-secondary: #6b7280;
   100% { transform: rotate(360deg); }
 }
 
+// Mobile Menu Toggle Button
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  background: $primary-blue;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(56, 182, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: darken($primary-blue, 10%);
+    transform: scale(1.05);
+  }
+
+  span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+  }
+
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+  }
+}
+
+// Mobile Menu Overlay
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  backdrop-filter: blur(4px);
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .layout-main {
     margin-left: 0;
+    padding-top: 4rem; // Add space for mobile menu toggle
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
   }
 }

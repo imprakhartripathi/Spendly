@@ -38,7 +38,7 @@ const Authenticator: React.FC = () => {
       localStorage.setItem("token", res.data.token);
       setSnackbar({ open: true, message: `Welcome ${res.data.user.fullName}` });
       setTimeout(() => {
-        navigate(isSignup ? "/pay" : "/dashboard");
+        navigate(isSignup ? "/payment" : "/dashboard");
       }, 1000);
     } catch (err: any) {
       setSnackbar({

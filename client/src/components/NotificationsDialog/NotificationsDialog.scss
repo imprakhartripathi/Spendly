@@ -1,0 +1,359 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$background-light: #f9fafb;
+$white: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+$border-light: #e5e7eb;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notifications-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+
+  .notifications-dialog {
+    background: $white;
+    border-radius: 20px;
+    box-shadow: $shadow-xl;
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid $border-light;
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        svg {
+          color: $primary-blue;
+        }
+
+        h2 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0;
+        }
+
+        .unread-badge {
+          background: $danger;
+          color: $white;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.25rem 0.5rem;
+          border-radius: 12px;
+          min-width: 20px;
+          text-align: center;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        button {
+          background: none;
+          border: none;
+          color: $text-secondary;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+          font-size: 0.875rem;
+
+          &:hover {
+            background: $background-light;
+            color: $text-primary;
+          }
+
+          &.mark-all-read-btn:hover {
+            background: rgba(16, 185, 129, 0.1);
+            color: $success;
+          }
+
+          &.clear-old-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: $danger;
+          }
+
+          &.close-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: $danger;
+          }
+        }
+      }
+    }
+
+    .notifications-content {
+      flex: 1;
+      overflow-y: auto;
+
+      .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2rem;
+        color: $text-secondary;
+
+        .loader {
+          width: 32px;
+          height: 32px;
+          border: 3px solid $border-light;
+          border-top: 3px solid $primary-blue;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 1rem;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.875rem;
+        }
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2rem;
+        text-align: center;
+        color: $text-secondary;
+
+        svg {
+          margin-bottom: 1rem;
+          opacity: 0.5;
+        }
+
+        h3 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0 0 0.5rem 0;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.875rem;
+        }
+      }
+
+      .notifications-list {
+        padding: 1rem 0;
+
+        .notification-item {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem 2rem;
+          border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:hover {
+            background: $background-light;
+          }
+
+          &.unread {
+            background: rgba(56, 182, 255, 0.02);
+            border-left: 3px solid $primary-blue;
+
+            &:hover {
+              background: rgba(56, 182, 255, 0.05);
+            }
+          }
+
+          .notification-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(56, 182, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.25rem;
+          }
+
+          .notification-content {
+            flex: 1;
+            min-width: 0;
+
+            .notification-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 0.5rem;
+
+              h4 {
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: $text-primary;
+                margin: 0;
+                line-height: 1.4;
+              }
+
+              .notification-time {
+                font-size: 0.75rem;
+                color: $text-muted;
+                flex-shrink: 0;
+                margin-left: 1rem;
+              }
+            }
+
+            p {
+              font-size: 0.875rem;
+              color: $text-secondary;
+              margin: 0 0 0.75rem 0;
+              line-height: 1.5;
+            }
+
+            .notification-meta {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+
+              .notification-type {
+                font-size: 0.75rem;
+                font-weight: 500;
+                padding: 0.25rem 0.5rem;
+                border-radius: 6px;
+                text-transform: capitalize;
+
+                &.system {
+                  background: rgba(56, 182, 255, 0.1);
+                  color: $primary-blue;
+                }
+
+                &.budget {
+                  background: rgba(239, 68, 68, 0.1);
+                  color: $danger;
+                }
+
+                &.auth {
+                  background: rgba(245, 158, 11, 0.1);
+                  color: $warning;
+                }
+
+                &.promo {
+                  background: rgba(16, 185, 129, 0.1);
+                  color: $success;
+                }
+              }
+
+              .unread-indicator {
+                color: $primary-blue;
+                font-size: 1.5rem;
+                line-height: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 640px) {
+  .notifications-overlay {
+    padding: 0.5rem;
+
+    .notifications-dialog {
+      max-height: 90vh;
+
+      .dialog-header {
+        padding: 1rem 1.5rem;
+
+        .header-left {
+          h2 {
+            font-size: 1.125rem;
+          }
+        }
+
+        .header-actions {
+          button {
+            padding: 0.375rem;
+            font-size: 0.75rem;
+
+            span {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .notifications-content {
+        .notifications-list {
+          .notification-item {
+            padding: 1rem 1.5rem;
+            gap: 0.75rem;
+
+            .notification-icon {
+              width: 32px;
+              height: 32px;
+            }
+
+            .notification-content {
+              .notification-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+
+                .notification-time {
+                  margin-left: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

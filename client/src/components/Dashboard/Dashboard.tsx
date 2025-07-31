@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import {
@@ -20,8 +21,8 @@ import {
   BarChart2,
   Filter,
 } from "lucide-react";
-// import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
+import TransactionDetailDialog from "../TransactionDetailDialog/TransactionDetailDialog";
 import "./Dashboard.scss";
 
 interface Transaction {
@@ -30,14 +31,16 @@ interface Transaction {
   amount: number;
   category: string;
   spentOn: string;
+  spentOnDesc: string;
   onDate: string;
 }
 
 const COLORS = ["#38b6ff", "#007bb5", "#ffc658", "#ff7f50"];
 
 const Dashboard = () => {
-  const { user } = useOutletContext<{ user: any }>();
-  const [searchTerm, setSearchTerm] = useState("");
+  const { user, refreshUser } = useOutletContext<{ user: any; refreshUser: () => void }>();
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [showTransactionDetail, setShowTransactionDetail] = useState(false);
   const transactions: Transaction[] = user?.transections || [];
 
   if (!user) return <div className="loading">Loading...</div>;
@@ -74,6 +77,15 @@ const Dashboard = () => {
     balance: monthlyData[month],
   }));
 
+  const handleTransactionClick = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setShowTransactionDetail(true);
+  };
+
+  const handleTransactionUpdate = () => {
+    refreshUser();
+  };
+
   return (
     <div className="dashboard-container">
 
@@ -83,7 +95,10 @@ const Dashboard = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        <Navbar user={user} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Navbar 
+          user={user} 
+          onRefresh={refreshUser}
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -307,6 +322,8 @@ const Dashboard = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index + 0.7 }}
                 whileHover={{ x: 5, scale: 1.01 }}
+                onClick={() => handleTransactionClick(txn)}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="transaction-icon">
                   <div className={`icon-wrapper ${txn.transectionType}`}>
@@ -328,6 +345,14 @@ const Dashboard = () => {
           </div>
         </motion.section>
       </motion.main>
+
+      <TransactionDetailDialog
+        isOpen={showTransactionDetail}
+        onClose={() => setShowTransactionDetail(false)}
+        transaction={selectedTransaction}
+        userId={user._id}
+        onUpdate={handleTransactionUpdate}
+      />
     </div>
   );
 };

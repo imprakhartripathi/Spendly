@@ -13,10 +13,12 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import MakePayment from "./components/MakePayment/MakePayment";
 import Transactions from "./components/Transactions/Transactions";
 import MonthlySummary from "./components/MonthlySummary/MonthlySummary";
-import Settings from "./components/Settings/Settings";
+// import Settings from "./pages/Settings/Settings";
 import CategoryTrends from "./components/CategoryTrends/CategoryTrends";
-import AutoPays from "./components/AutoPays/AutoPays";
+// import AutoPays from "./pages/AutoPays/AutoPays";
 import Layout from "./components/Layout/Layout";
+import AutoPays from "./components/AutoPays/AutoPays";
+import Settings from "./components/Settings/Settings";
 
 // Protected layout to dynamically redirect
 const ProtectedLayout: React.FC = () => {

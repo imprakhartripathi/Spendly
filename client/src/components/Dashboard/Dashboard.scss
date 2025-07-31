@@ -496,53 +496,182 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-
-    &.open {
-      transform: translateX(0);
-    }
-  }
-
   .main-content {
     margin-left: 0;
     padding: 1rem;
 
-    .dashboard-header {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 1rem;
-
-      .header-right {
-        justify-content: space-between;
-
-        .search-container input {
-          width: 200px;
-        }
-      }
-    }
-
     .summary-cards {
       grid-template-columns: 1fr;
       gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .summary-card {
+        padding: 1.25rem;
+        border-radius: 16px;
+
+        .card-icon {
+          width: 40px;
+          height: 40px;
+          margin-bottom: 0.75rem;
+        }
+
+        .card-content {
+          .amount {
+            font-size: 1.5rem;
+          }
+        }
+      }
     }
 
     .charts-section {
       grid-template-columns: 1fr;
       gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .chart-card {
+        padding: 1.25rem;
+        border-radius: 16px;
+
+        .chart-header {
+          margin-bottom: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+
+          h3 {
+            font-size: 1rem;
+          }
+
+          .chart-period {
+            align-self: stretch;
+            justify-content: space-between;
+
+            .period-btn {
+              flex: 1;
+              text-align: center;
+              padding: 0.5rem 0.5rem;
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+
+    .recent-transactions {
+      padding: 1.25rem;
+      border-radius: 16px;
+
+      .section-header {
+        margin-bottom: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+
+        h3 {
+          font-size: 1rem;
+        }
+
+        .view-all-btn {
+          align-self: stretch;
+          text-align: center;
+        }
+      }
+
+      .transactions-list {
+        .transaction-item {
+          padding: 0.75rem 0;
+          gap: 0.75rem;
+
+          .transaction-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+          }
+
+          .transaction-details {
+            .transaction-title {
+              font-size: 0.875rem;
+            }
+
+            .transaction-meta {
+              font-size: 0.75rem;
+            }
+          }
+
+          .transaction-amount {
+            font-size: 0.875rem;
+            text-align: right;
+          }
+        }
+      }
     }
   }
 }
 
 @media (max-width: 480px) {
   .main-content {
-    .dashboard-header {
-      .header-right {
-        flex-wrap: wrap;
+    padding: 0.75rem;
 
-        .search-container input {
-          width: 100%;
+    .summary-cards {
+      gap: 0.75rem;
+
+      .summary-card {
+        padding: 1rem;
+
+        .card-content {
+          .amount {
+            font-size: 1.375rem;
+          }
+
+          h3 {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+
+    .charts-section {
+      gap: 0.75rem;
+
+      .chart-card {
+        padding: 1rem;
+
+        .chart-header {
+          .chart-period {
+            .period-btn {
+              padding: 0.375rem 0.25rem;
+              font-size: 0.65rem;
+            }
+          }
+        }
+      }
+    }
+
+    .recent-transactions {
+      padding: 1rem;
+
+      .transactions-list {
+        .transaction-item {
+          .transaction-details {
+            min-width: 0;
+            flex: 1;
+
+            .transaction-title {
+              font-size: 0.8rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .transaction-meta {
+              font-size: 0.7rem;
+            }
+          }
+
+          .transaction-amount {
+            font-size: 0.8rem;
+            min-width: fit-content;
+          }
         }
       }
     }

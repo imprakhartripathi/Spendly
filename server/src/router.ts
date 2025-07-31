@@ -3,7 +3,9 @@ import { checkTokenExpiry, login, sendUserInfo, signup } from "./controllers/aut
 import { deleteUser, updateUser } from "./controllers/user.controller";
 import { authenticate } from "./middleware/auth.middleware";
 import { requireSelf } from "./middleware/ownership.middleware";
-import { createTransection, deleteTransection, getAllTransections, getTransectionById, updateTransection } from "./controllers/transection.controller";
+import { createTransection, deleteTransection, getAllTransections, getTransectionById, updateTransection, searchTransections } from "./controllers/transection.controller";
+import { getNotifications, markNotificationsAsRead, clearNotifications } from "./controllers/notification.controller";
+import { getAutopayTransactions, createAutopayTransaction, updateAutopayTransaction, deleteAutopayTransaction } from "./controllers/autopay.controller";
 import { cancelSubscription, createSubscription, verifyPayment } from "./controllers/razorpay.controller";
 
 export const router = express.Router();
@@ -34,5 +36,17 @@ router.delete("/user/delete/:id", authenticate, requireSelf, deleteUser); // jus
 router.post("/user/:id/add/transection", authenticate, requireSelf, createTransection);
 router.get("/user/:id/transections", authenticate, requireSelf, getAllTransections);
 router.get("/user/:id/transection", authenticate, requireSelf, getTransectionById);
+router.get("/user/:id/search/transections", authenticate, requireSelf, searchTransections);
 router.patch("/user/:id/edit/transection", authenticate, requireSelf, updateTransection);
 router.delete("/user/:id/delete/transection", authenticate, requireSelf, deleteTransection);
+
+// Notification routes
+router.get("/user/:id/notifications", authenticate, requireSelf, getNotifications);
+router.patch("/user/:id/notifications/read", authenticate, requireSelf, markNotificationsAsRead);
+router.delete("/user/:id/notifications/clear", authenticate, requireSelf, clearNotifications);
+
+// Autopay routes (Premium only)
+router.get("/user/:id/autopay", authenticate, requireSelf, getAutopayTransactions);
+router.post("/user/:id/autopay", authenticate, requireSelf, createAutopayTransaction);
+router.patch("/user/:id/autopay", authenticate, requireSelf, updateAutopayTransaction);
+router.delete("/user/:id/autopay", authenticate, requireSelf, deleteAutopayTransaction);
