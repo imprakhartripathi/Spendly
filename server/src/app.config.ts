@@ -18,7 +18,8 @@ export const corsConfig = {
     callback: (err: Error | null, allow?: boolean) => void
   ) => {
     const localhostOrigin = `http://localhost:${process.env.CLIENT_PORT || 5173}`;
-    const allowedOrigins = [localhostOrigin, "https://ispendly.netlify.app/"];
+    const tunnenlOrigin = `https://${process.env.TUNNEL_URL}.ngrok-free.app`;
+    const allowedOrigins = [localhostOrigin, "https://ispendly.netlify.app/", tunnenlOrigin];
 
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
