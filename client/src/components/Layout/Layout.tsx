@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 import { backendURL } from "../../app.config";
 import Sidebar from "../Sidebar/Sidebar";
+import MobileNotificationButton from "../MobileNotificationButton/MobileNotificationButton";
 import "./Layout.scss";
 
 const Layout: React.FC = () => {
@@ -63,16 +64,29 @@ const Layout: React.FC = () => {
         onMobileMenuClose={() => setIsMobileMenuOpen(false)}
       />
       <main className="layout-main">
-        <button 
-          className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
-          onClick={toggleMobileMenu}
-          aria-label="Toggle mobile menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        {isMobileMenuOpen && <div className="mobile-menu-overlay" />}
+        <div className="mobile-navbar">
+          <button 
+            className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div className="mobile-logo">
+            <img src="/logo.png" alt="Spendly" className="mobile-logo-image" />
+          </div>
+          <div className="mobile-navbar-right">
+            <MobileNotificationButton user={user} />
+          </div>
+        </div>
+        {isMobileMenuOpen && (
+          <div 
+            className="mobile-menu-overlay" 
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
         <Outlet context={{ user, refreshUser: fetchUser }} />
       </main>
     </div>

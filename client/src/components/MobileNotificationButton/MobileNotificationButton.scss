@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+// Color Variables
+$primary-blue: #38b6ff;
+$secondary-blue: #007bb5;
+$white: #ffffff;
+$danger: #ef4444;
+
+.mobile-notification-btn {
+  position: relative;
+  padding: 0.625rem;
+  background: linear-gradient(135deg, rgba(56, 182, 255, 0.1), rgba(56, 182, 255, 0.05));
+  border: 1px solid rgba(56, 182, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  color: $primary-blue;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: linear-gradient(135deg, $primary-blue, #2ea3e6);
+    border-color: $primary-blue;
+    color: $white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 182, 255, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .mobile-notification-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: $danger;
+    color: $white;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.125rem 0.3rem;
+    border-radius: 8px;
+    min-width: 16px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    border: 1.5px solid $white;
+  }
+}

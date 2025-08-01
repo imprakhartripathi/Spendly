@@ -88,11 +88,11 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onUserUpdate, isMobileMenuOpen,
   return (
     <motion.aside 
       className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}
-      initial={{ x: isMobile ? -280 : -250 }}
+      initial={{ x: isMobile ? 0 : -250 }}
       animate={{ 
-        x: isMobile ? (isMobileMenuOpen ? 0 : -280) : 0 
+        x: isMobile ? 0 : 0 
       }}
-      transition={{ duration: isMobile ? 0.3 : 0.5, ease: "easeOut" }}
+      transition={{ duration: isMobile ? 0 : 0.5, ease: "easeOut" }}
     >
       <motion.div 
         className="sidebar-header"

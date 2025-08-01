@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Bell, Plus } from "lucide-react";
+import { Bell } from "lucide-react";
 import axios from "axios";
 import { backendURL } from "../../app.config";
 import TransactionForm from "../TransactionForm/TransactionForm";
@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onRefresh }) => {
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowTransactionForm(true)}
           >
-            <Plus size={16} />
+            {/* <Plus size={16} /> */}
             Add Transaction
           </motion.button>
         </div>
