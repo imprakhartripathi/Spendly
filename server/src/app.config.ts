@@ -17,18 +17,26 @@ export const corsConfig = {
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void
   ) => {
-    const localhostOrigin = `http://localhost:${process.env.CLIENT_PORT || 5173}`;
-    const tunnenlOrigin = `https://${process.env.TUNNEL_URL}.ngrok-free.app`;
-    const allowedOrigins = [localhostOrigin, "https://ispendly.netlify.app/", tunnenlOrigin];
+    const allowedOrigins = [
+      `http://localhost:${process.env.CLIENT_PORT || 5173}`,
+      "https://ispendly.netlify.app",
+    ];
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    // Allow ngrok during dev (any subdomain)
+    if (origin?.includes("ngrok-free.app")) {
+      return callback(null, true);
     }
+
+    // Allow from whitelist
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
 };
+
 
 export const backupPort = 4000;
 
