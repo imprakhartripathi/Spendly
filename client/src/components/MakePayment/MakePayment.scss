@@ -139,7 +139,9 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 
 
       .tier-icon {
         background: rgba(255, 255, 255, 0.2);
-        color: $white;
+        color: $white !important;
+        border: 1px solid $white;
+        transition: all 0.3s ease;
       }
 
 
@@ -477,4 +479,96 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+// Process Dialog Styles
+.process-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: "Inter", sans-serif;
+
+  .process-dialog {
+    background: $white;
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    box-shadow: $shadow-xl;
+    text-align: center;
+    min-width: 400px;
+    max-width: 500px;
+    border: 1px solid $border-light;
+
+    .process-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+
+      .process-loader {
+        .spinner {
+          width: 60px;
+          height: 60px;
+          border: 4px solid $border-light;
+          border-top: 4px solid $primary-blue;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0;
+      }
+
+      .process-step {
+        font-size: 1.1rem;
+        color: $text-secondary;
+        font-weight: 500;
+        margin: 0;
+        min-height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  // Responsive design for process dialog
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    .process-dialog {
+      min-width: auto;
+      width: 100%;
+      max-width: 350px;
+      padding: 2rem 1.5rem;
+
+      .process-content {
+        gap: 1rem;
+
+        .process-loader .spinner {
+          width: 50px;
+          height: 50px;
+        }
+
+        h3 {
+          font-size: 1.25rem;
+        }
+
+        .process-step {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
 }

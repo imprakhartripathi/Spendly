@@ -5,15 +5,15 @@ import { backendURL } from "../../app.config";
 import "./MakePayment.scss";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Check, Star } from "lucide-react";
+import { CreditCard, Check, Star, Crown } from "lucide-react";
 
 const TIERS = ["free", "plus", "premium"] as const;
 type Tier = (typeof TIERS)[number];
 
 const TIER_FEATURES: Record<Tier, string[]> = {
   free: [
-    "User registration and login",
-    "Add/edit/delete income and expenses",
+    // "User registration and login",
+    "Manage income and expenses",
     "View list of transactions",
     "View basic monthly summary (total income and expenses)",
   ],
@@ -21,12 +21,12 @@ const TIER_FEATURES: Record<Tier, string[]> = {
     "All Free features",
     "Set and track budgets",
     "Category-wise analytics (charts)",
-    "Download reports in .txt format",
+    // "Download reports in .txt format",
     "View spending trends by category",
   ],
   premium: [
     "All Plus features",
-    "Advanced reports in downloadable PDF format",
+    // "Advanced reports in downloadable PDF format",
     "Recurring transactions setup",
     "Alerts and reminders for bills/budget limits",
     "Monthly financial goal tracking",
@@ -39,6 +39,8 @@ const MakePayment: React.FC = () => {
   const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
   const [currentTier, setCurrentTier] = useState<Tier | null>(null);
   const [loading, setLoading] = useState(false);
+  const [processStep, setProcessStep] = useState<string>("");
+  const [showProcessDialog, setShowProcessDialog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,62 +65,132 @@ const MakePayment: React.FC = () => {
       if (!doubleCheck) return;
 
       setLoading(true);
-      await axios.post(
-        `${backendURL}/cancel-subs/${user._id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("Subscription Cancelled. Downgraded to Free.");
-      setCurrentTier("free");
-      setLoading(false);
-      window.location.reload();
+      setShowProcessDialog(true);
+      setProcessStep("Cancelling your subscription...");
+      
+      try {
+        await axios.post(
+          `${backendURL}/cancel-subs/${user._id}`,
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setProcessStep("Subscription cancelled successfully!");
+        setTimeout(() => {
+          alert("Subscription Cancelled. Downgraded to Free.");
+          setCurrentTier("free");
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
+        console.error("Error cancelling subscription:", error);
+        setProcessStep("Failed to cancel subscription");
+        setTimeout(() => {
+          alert("Failed to cancel subscription. Please try again.");
+          setShowProcessDialog(false);
+          setLoading(false);
+        }, 1500);
+      }
     } else {
       setLoading(true);
-      const subsRes = await axios.post(
-        `${backendURL}/create-subscription`,
-        { tier: selectedTier },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const { id: subscription_id } = subsRes.data;
-
-      const options = {
-        key: import.meta.env.RAZORPAY_KEY_ID,
-        name: "Spendly",
-        description: `Upgrade to ${selectedTier}`,
-        subscription_id,
-        handler: async function (response: any) {
+      setShowProcessDialog(true);
+      
+      try {
+        // Step 1: Cancel current subscription if user has an ongoing subscription (not free)
+        if (user.tier !== "free") {
+          setProcessStep(`Cancelling current ${capitalize(user.tier)} subscription...`);
+          console.log(`Cancelling current ${user.tier} subscription...`);
           await axios.post(
-            `${backendURL}/verify-payment/${user._id}`,
-            {
-              razorpay_subscription_id: response.razorpay_subscription_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              tier: selectedTier,
-            },
+            `${backendURL}/cancel-subs/${user._id}`,
+            {},
             { headers: { Authorization: `Bearer ${token}` } }
           );
+          console.log("Current subscription cancelled successfully");
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Small delay for UX
+        }
 
-          alert(`Successfully upgraded to ${selectedTier}`);
-          setCurrentTier(selectedTier);
-          window.location.reload();
+        // Step 2: Create new subscription
+        setProcessStep(`Creating ${capitalize(selectedTier)} subscription...`);
+        console.log(`Creating new ${selectedTier} subscription...`);
+        const subsRes = await axios.post(
+          `${backendURL}/create-subscription`,
+          { tier: selectedTier },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-        },
-        prefill: {
-          name: user?.fullName || "",
-          email: user?.email || "",
-          contact: user?.contact || "",
-        },
-        notes: `Generated Subscription By Spendly User ${user?.fullName}, ID: ${user?._id}`,
-        theme: {
-          color: "#38b6ff",
-        },
-      };
+        const { id: subscription_id } = subsRes.data;
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Small delay for UX
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-      setLoading(false);
-      
+        // Step 3: Open Razorpay popup for payment
+        setProcessStep("Opening payment gateway...");
+        await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UX
+        
+        const options = {
+          key: import.meta.env.RAZORPAY_KEY_ID,
+          name: "Spendly",
+          description: `${user.tier === "free" ? "Upgrade" : user.tier === selectedTier ? "Renew" : "Change plan"} to ${selectedTier}`,
+          subscription_id,
+          handler: async function (response: any) {
+            setProcessStep("Verifying payment...");
+            try {
+              await axios.post(
+                `${backendURL}/verify-payment/${user._id}`,
+                {
+                  razorpay_subscription_id: response.razorpay_subscription_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  tier: selectedTier,
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+
+              setProcessStep("Payment verified successfully!");
+              setTimeout(() => {
+                alert(`Successfully ${user.tier === "free" ? "upgraded" : "changed plan"} to ${selectedTier}`);
+                setCurrentTier(selectedTier);
+                window.location.reload();
+              }, 1000);
+            } catch (error) {
+              console.error("Error verifying payment:", error);
+              setProcessStep("Payment verification failed");
+              setTimeout(() => {
+                alert("Payment verification failed. Please contact support.");
+                setShowProcessDialog(false);
+                setLoading(false);
+              }, 1500);
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              console.log("Payment modal dismissed");
+              setProcessStep("");
+              setShowProcessDialog(false);
+              setLoading(false);
+            }
+          },
+          prefill: {
+            name: user?.fullName || "",
+            email: user?.email || "",
+            contact: user?.contact || "",
+          },
+          notes: `Generated Subscription By Spendly User ${user?.fullName}, ID: ${user?._id}`,
+          theme: {
+            color: "#38b6ff",
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+        setShowProcessDialog(false); // Hide dialog when payment popup opens
+        setLoading(false);
+        
+      } catch (error) {
+        console.error("Error in subscription process:", error);
+        setProcessStep("Failed to process subscription");
+        setTimeout(() => {
+          alert("Failed to process subscription. Please try again.");
+          setShowProcessDialog(false);
+          setLoading(false);
+        }, 1500);
+      }
     }
   };
 
@@ -170,6 +242,26 @@ const MakePayment: React.FC = () => {
 
   return (
     <div className="payment-container">
+      {/* Process Dialog */}
+      {showProcessDialog && (
+        <div className="process-dialog-overlay">
+          <motion.div 
+            className="process-dialog"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="process-content">
+              <div className="process-loader">
+                <div className="spinner"></div>
+              </div>
+              <h3>Processing Your Request</h3>
+              <p className="process-step">{processStep}</p>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       <motion.main 
         className="main-content"
         initial={{ opacity: 0, x: 50 }}
@@ -228,7 +320,7 @@ const MakePayment: React.FC = () => {
                   <div className="tier-icon">
                     {tier === "free" && <Check size={24} />}
                     {tier === "plus" && <Star size={24} />}
-                    {tier === "premium" && <CreditCard size={24} />}
+                    {tier === "premium" && <Crown size={24} />}
                   </div>
                   <h2>{capitalize(tier)}</h2>
                 </div>
