@@ -19,9 +19,12 @@ import {
   Wallet,
   BarChart2,
   Filter,
+  Edit3,
+  Plus,
 } from "lucide-react";
 import Navbar from "../Navbar/Navbar";
 import TransactionDetailDialog from "../TransactionDetailDialog/TransactionDetailDialog";
+import BudgetIncomeDialog from "../BudgetIncomeDialog/BudgetIncomeDialog";
 import "./Dashboard.scss";
 
 interface Transaction {
@@ -44,6 +47,7 @@ const Dashboard = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [showTransactionDetail, setShowTransactionDetail] = useState(false);
+  const [showBudgetDialog, setShowBudgetDialog] = useState(false);
   const navigate = useNavigate();
 
   const transactions: Transaction[] = user?.transections || [];
@@ -58,6 +62,7 @@ const Dashboard = () => {
     .filter((t) => t.transectionType === "credit")
     .reduce((a, b) => a + b.amount, 0);
 
+  // Current balance should include all credits (including auto-savings) as they represent actual money
   const currentBalance = user.income + totalCredit - totalDebit;
 
   const categoryStats = transactions.reduce(
@@ -73,20 +78,27 @@ const Dashboard = () => {
   }));
 
   const monthlyData = transactions.reduce(
-    (acc: Record<string, number>, txn) => {
+    (acc: Record<string, { balance: number; hasTransactions: boolean }>, txn) => {
       const month = new Date(txn.onDate).toLocaleString("default", {
         month: "short",
       });
-      if (!acc[month]) acc[month] = user.income;
-      acc[month] += txn.transectionType === "credit" ? txn.amount : -txn.amount;
+      if (!acc[month]) {
+        acc[month] = { balance: user.income, hasTransactions: false };
+      }
+      acc[month].hasTransactions = true;
+      acc[month].balance += txn.transectionType === "credit" ? txn.amount : -txn.amount;
       return acc;
     },
     {}
   );
-  const monthlyChartData = Object.keys(monthlyData).map((month) => ({
-    month,
-    balance: monthlyData[month],
-  }));
+  
+  // Only show months that have transactions to avoid misleading data
+  const monthlyChartData = Object.keys(monthlyData)
+    .filter(month => monthlyData[month].hasTransactions)
+    .map((month) => ({
+      month,
+      balance: monthlyData[month].balance,
+    }));
 
   // Sort transactions by date (latest first)
   const latestTransactions = [...transactions]
@@ -127,7 +139,7 @@ const Dashboard = () => {
                 <ArrowDownRight size={24} />
               </div>
               <div className="card-content">
-                <h3>Total Spent</h3>
+                <h3>Total Debit</h3>
                 <p className="amount">₹{totalDebit.toLocaleString()}</p>
               </div>
             </motion.div>
@@ -140,7 +152,7 @@ const Dashboard = () => {
                 <ArrowUpRight size={24} />
               </div>
               <div className="card-content">
-                <h3>Total Income</h3>
+                <h3>Total Credit</h3>
                 <p className="amount">₹{totalCredit.toLocaleString()}</p>
               </div>
             </motion.div>
@@ -167,32 +179,46 @@ const Dashboard = () => {
                   <BarChart2 size={24} />
                 </div>
                 <div className="card-content">
-                  <h3>Budget Usage</h3>
-                  <p className="amount">
-                    {user.monthlyBudget
-                      ? ((totalDebit / user.monthlyBudget) * 100).toFixed(1)
-                      : 0}
-                    %
-                  </p>
-                  <span className="budget-details">
-                    ₹{totalDebit.toLocaleString()} / ₹
-                    {user.monthlyBudget?.toLocaleString() || 0}
-                  </span>
-                  <div className="progress-bar">
-                    <motion.div
-                      className="progress-fill"
-                      animate={{
-                        width: `${
-                          user.monthlyBudget
-                            ? Math.min(
-                                (totalDebit / user.monthlyBudget) * 100,
-                                100
-                              )
-                            : 0
-                        }%`,
-                      }}
-                    />
+                  <div className="card-header">
+                    <h3>Budget Usage</h3>
+                    <motion.button
+                      className="edit-btn"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowBudgetDialog(true)}
+                    >
+                      {user.monthlyBudget ? <Edit3 size={16} /> : <Plus size={16} />}
+                    </motion.button>
                   </div>
+                  {user.monthlyBudget ? (
+                    <>
+                      <p className="amount">
+                        {((totalDebit / user.monthlyBudget) * 100).toFixed(1)}%
+                      </p>
+                      <span className="budget-details">
+                        ₹{totalDebit.toLocaleString()} / ₹
+                        {user.monthlyBudget.toLocaleString()}
+                      </span>
+                      <div className="progress-bar">
+                        <motion.div
+                          className="progress-fill"
+                          animate={{
+                            width: `${Math.min(
+                              (totalDebit / user.monthlyBudget) * 100,
+                              100
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="no-budget">
+                      <p className="set-budget-text">Set a budget</p>
+                      <span className="set-budget-desc">
+                        Track your spending with a monthly budget
+                      </span>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -319,6 +345,14 @@ const Dashboard = () => {
         transaction={selectedTransaction}
         userId={user._id}
         onUpdate={handleTransactionUpdate}
+      />
+
+      <BudgetIncomeDialog
+        isOpen={showBudgetDialog}
+        onClose={() => setShowBudgetDialog(false)}
+        user={user}
+        onUpdate={refreshUser}
+        type="budget"
       />
     </div>
   );

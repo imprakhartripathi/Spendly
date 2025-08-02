@@ -7,6 +7,7 @@ import { createTransection, deleteTransection, getAllTransections, getTransectio
 import { getNotifications, markNotificationsAsRead, clearNotifications } from "./controllers/notification.controller";
 import { getAutopayTransactions, createAutopayTransaction, updateAutopayTransaction, deleteAutopayTransaction } from "./controllers/autopay.controller";
 import { cancelSubscription, createSubscription, verifyPayment } from "./controllers/razorpay.controller";
+import { processMonthlySavings, sendMonthlySavingsReminder } from "./controllers/monthly.savings.controller";
 
 export const router = express.Router();
 
@@ -50,3 +51,22 @@ router.get("/user/:id/autopay", authenticate, requireSelf, getAutopayTransaction
 router.post("/user/:id/autopay", authenticate, requireSelf, createAutopayTransaction);
 router.patch("/user/:id/autopay", authenticate, requireSelf, updateAutopayTransaction);
 router.delete("/user/:id/autopay", authenticate, requireSelf, deleteAutopayTransaction);
+
+// Monthly savings routes (Admin/Testing only)
+router.post("/admin/process-monthly-savings", async (req, res) => {
+  try {
+    await processMonthlySavings();
+    res.status(200).json({ message: "Monthly savings processed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error processing monthly savings", error });
+  }
+});
+
+router.post("/admin/send-savings-reminder", async (req, res) => {
+  try {
+    await sendMonthlySavingsReminder();
+    res.status(200).json({ message: "Monthly savings reminders sent successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error sending savings reminders", error });
+  }
+});

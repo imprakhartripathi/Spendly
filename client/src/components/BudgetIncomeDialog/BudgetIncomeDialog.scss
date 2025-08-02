@@ -1,0 +1,68 @@
+.dialog-title {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-bottom: 1px solid #e2e8f0;
+  
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #38b6ff, #007bb5);
+    border-radius: 12px;
+    color: white;
+  }
+}
+
+.dialog-content {
+  padding: 24px !important;
+  
+  .current-value {
+    background: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #38b6ff;
+  }
+}
+
+.dialog-actions {
+  padding: 16px 24px !important;
+  gap: 12px;
+  
+  .save-button {
+    background: linear-gradient(135deg, #38b6ff, #007bb5) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 8px 24px !important;
+    border-radius: 8px !important;
+    text-transform: none !important;
+    
+    &:hover {
+      background: linear-gradient(135deg, #007bb5, #005a8a) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56, 182, 255, 0.3) !important;
+    }
+    
+    &:disabled {
+      background: #94a3b8 !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 600px) {
+  .dialog-content {
+    padding: 16px !important;
+  }
+  
+  .dialog-actions {
+    padding: 12px 16px !important;
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -12,8 +12,9 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { Calendar, TrendingUp, TrendingDown } from "lucide-react";
+import { Calendar, TrendingUp, TrendingDown, Edit3 } from "lucide-react";
 import Navbar from "../Navbar/Navbar";
+import BudgetIncomeDialog from "../BudgetIncomeDialog/BudgetIncomeDialog";
 import "./MonthlySummary.scss";
 
 interface Transaction {
@@ -42,6 +43,7 @@ const MonthlySummary: React.FC = () => {
   const { user, refreshUser } = useOutletContext<{ user: any; refreshUser: () => void }>();
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [showIncomeDialog, setShowIncomeDialog] = useState(false);
   const transactions: Transaction[] = user?.transections || [];
   const loading = !user;
 
@@ -55,7 +57,7 @@ const MonthlySummary: React.FC = () => {
       const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
       monthlyStats[monthKey] = {
         month: date.toLocaleString('default', { month: 'short', year: 'numeric' }),
-        income: 0,
+        income: user?.income || 0, // Use user.income as base income
         expenses: 0,
         net: 0,
       };
@@ -68,7 +70,7 @@ const MonthlySummary: React.FC = () => {
       
       if (monthlyStats[monthKey]) {
         if (txn.transectionType === 'credit') {
-          monthlyStats[monthKey].income += txn.amount;
+          monthlyStats[monthKey].income += txn.amount; // Add credit transactions to base income
         } else {
           monthlyStats[monthKey].expenses += txn.amount;
         }
@@ -85,12 +87,34 @@ const MonthlySummary: React.FC = () => {
       return txnDate.getMonth() === selectedMonth && txnDate.getFullYear() === selectedYear;
     });
 
-    const income = currentMonthTransactions
-      .filter((t: Transaction) => t.transectionType === 'credit')
+    // Calculate actual credit transactions (excluding auto-generated savings)
+    const actualCreditTransactions = currentMonthTransactions
+      .filter((t: Transaction) => {
+        if (t.transectionType === 'credit') {
+          // Exclude auto-generated savings transactions
+          if (t.spentOn && t.spentOn.includes('Savings') && t.category === 'Savings') {
+            return false;
+          }
+          return true;
+        }
+        return false;
+      })
       .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
+    
+    const baseMonthlyIncome = user?.income || 0; // Assuming this is monthly base income
+    const totalIncome = baseMonthlyIncome + actualCreditTransactions;
     
     const expenses = currentMonthTransactions
       .filter((t: Transaction) => t.transectionType === 'debit')
+      .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
+
+    // Calculate savings from previous months that were added as credit transactions
+    const autoSavings = currentMonthTransactions
+      .filter((t: Transaction) => {
+        return t.transectionType === 'credit' && 
+               t.spentOn && t.spentOn.includes('Savings') && 
+               t.category === 'Savings';
+      })
       .reduce((sum: number, t: Transaction) => sum + t.amount, 0);
 
     const categoryBreakdown: CategoryBreakdown = {};
@@ -101,9 +125,10 @@ const MonthlySummary: React.FC = () => {
       });
 
     return {
-      income,
+      income: totalIncome,
       expenses,
-      net: income - expenses,
+      net: totalIncome - expenses,
+      autoSavings, // Track auto-generated savings separately
       transactions: currentMonthTransactions,
       categoryBreakdown: Object.entries(categoryBreakdown).map(([name, value]) => ({ name, value })),
     };
@@ -116,6 +141,23 @@ const MonthlySummary: React.FC = () => {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+
+  // Generate dynamic years based on user creation date
+  const getAvailableYears = () => {
+    if (!user?.createdAt) return [new Date().getFullYear()];
+    
+    const createdYear = new Date(user.createdAt).getFullYear();
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    
+    for (let year = currentYear; year >= createdYear; year--) {
+      years.push(year);
+    }
+    
+    return years;
+  };
+
+  const availableYears = getAvailableYears();
 
   if (loading) {
     return (
@@ -153,7 +195,7 @@ const MonthlySummary: React.FC = () => {
             value={selectedYear} 
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
           >
-            {[2024, 2023, 2022].map(year => (
+            {availableYears.map(year => (
               <option key={year} value={year}>{year}</option>
             ))}
           </select>
@@ -171,9 +213,24 @@ const MonthlySummary: React.FC = () => {
             <TrendingUp size={24} />
           </div>
           <div className="stat-content">
-            <h3>Total Income</h3>
+            <div className="stat-header">
+              <h3>Total Income</h3>
+              <motion.button
+                className="edit-income-btn"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowIncomeDialog(true)}
+              >
+                <Edit3 size={14} />
+              </motion.button>
+            </div>
             <p className="stat-number">₹{currentMonthData.income.toLocaleString()}</p>
-            <span className="stat-change positive">+12.5% from last month</span>
+            <span className="stat-change positive">
+              Base: ₹{(user?.income || 0).toLocaleString()}
+              {currentMonthData.autoSavings > 0 && (
+                <> • Auto-Savings: ₹{currentMonthData.autoSavings.toLocaleString()}</>
+              )}
+            </span>
           </div>
         </div>
         
@@ -277,6 +334,14 @@ const MonthlySummary: React.FC = () => {
           </ResponsiveContainer>
         </motion.div>
       </div>
+
+      <BudgetIncomeDialog
+        isOpen={showIncomeDialog}
+        onClose={() => setShowIncomeDialog(false)}
+        user={user}
+        onUpdate={refreshUser}
+        type="income"
+      />
     </motion.div>
   );
 };

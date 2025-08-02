@@ -107,6 +107,41 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 
       .stat-content {
         flex: 1;
 
+        .stat-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: $text-secondary;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .edit-income-btn {
+            background: rgba(56, 182, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 0.375rem;
+            color: $primary-blue;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+              background: $primary-blue;
+              color: $white;
+              transform: scale(1.1);
+            }
+          }
+        }
+
         h3 {
           font-size: 0.875rem;
           font-weight: 600;

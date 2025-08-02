@@ -5,6 +5,7 @@ import { router } from "./router";
 import { connectMongoDB } from "./mongodb/mongodb.config";
 import { backupPort, corsConfig } from "./app.config";
 import { initializeAutopayJobs } from "./controllers/autopay.controller";
+import { initializeMonthlySavingsJobs } from "./controllers/monthly.savings.controller";
 
 dotenv.config();
 
@@ -21,6 +22,9 @@ connectMongoDB();
 
 // Initialize autopay cron jobs
 initializeAutopayJobs();
+
+// Initialize monthly savings cron jobs
+initializeMonthlySavingsJobs();
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);

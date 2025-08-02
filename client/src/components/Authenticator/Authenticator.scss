@@ -1,8 +1,15 @@
 .auth-wrapper {
   display: flex;
-  // height: 100vh;  // full viewport height to eliminate extra scroll
+  height: 100vh;  // full viewport height to eliminate extra scroll
   font-family: 'Inter', sans-serif;
   overflow: hidden;  // prevents scrollbars from oversized content
+
+  // Responsive layout for mobile devices
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
 }
 
 .auth-left {
@@ -15,20 +22,47 @@
   padding: 2rem 3rem;
   overflow-y: auto;  // adds scroll only if necessary
 
+  // Responsive styles for mobile
+  @media (max-width: 768px) {
+    order: 2; // Move form to bottom
+    padding: 1.5rem;
+    min-height: auto;
+    justify-content: flex-start;
+  }
+
   .logo {
     width: 300px;
     margin-bottom: 1rem;
+
+    // Responsive logo size for mobile
+    @media (max-width: 768px) {
+      width: 200px;
+      margin-bottom: 0.5rem;
+    }
   }
 
   h1 {
     font-size: 2rem;
     color: #007bb5;
     margin-bottom: 0;
+
+    // Responsive heading for mobile
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+      text-align: center;
+    }
   }
 
   p {
     color: #64748b;
     margin-bottom: 2rem;
+
+    // Responsive paragraph for mobile
+    @media (max-width: 768px) {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
   }
 
   form {
