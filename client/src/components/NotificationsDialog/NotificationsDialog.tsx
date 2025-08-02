@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Bell, Check, Trash2, AlertCircle, Info, DollarSign, Settings } from "lucide-react";
+import { X, Bell, Check, AlertCircle, Info, DollarSign, Settings } from "lucide-react";
 import axios from "axios";
 import { backendURL } from "../../app.config";
 import Portal from "../Portal/Portal";
@@ -84,17 +84,17 @@ const NotificationsDialog: React.FC<NotificationsDialogProps> = ({
     }
   };
 
-  const clearOldNotifications = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`${backendURL}/user/${userId}/notifications/clear?olderThanDays=30`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchNotifications();
-    } catch (error) {
-      console.error("Error clearing notifications:", error);
-    }
-  };
+  // const clearOldNotifications = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     await axios.delete(`${backendURL}/user/${userId}/notifications/clear?olderThanDays=30`, {
+  //       headers: { Authorization: `Bearer ${token}` }
+  //     });
+  //     fetchNotifications();
+  //   } catch (error) {
+  //     console.error("Error clearing notifications:", error);
+  //   }
+  // };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -176,13 +176,13 @@ const NotificationsDialog: React.FC<NotificationsDialogProps> = ({
                 Mark all read
               </button>
             )}
-            <button 
+            {/* <button 
               className="clear-old-btn"
               onClick={clearOldNotifications}
             >
               <Trash2 size={16} />
               Clear old
-            </button>
+            </button> */}
             <button className="close-btn" onClick={onClose}>
               <X size={20} />
             </button>

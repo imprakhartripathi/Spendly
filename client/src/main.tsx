@@ -7,6 +7,7 @@ import {
   Outlet,
   useNavigate,
 } from "react-router-dom";
+import ErrorBoundary from "./ErrorBoundary";
 import Authenticator from "./components/Authenticator/Authenticator";
 import NotFound from "./components/NotFound/NotFound";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -93,8 +94,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+// Add some debugging
+console.log("Main.tsx is loading...");
+console.log("Environment:", import.meta.env.MODE);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   </React.StrictMode>
 );
