@@ -225,12 +225,7 @@ const MonthlySummary: React.FC = () => {
               </motion.button>
             </div>
             <p className="stat-number">₹{currentMonthData.income.toLocaleString()}</p>
-            <span className="stat-change positive">
-              Base: ₹{(user?.income || 0).toLocaleString()}
-              {currentMonthData.autoSavings > 0 && (
-                <> • Auto-Savings: ₹{currentMonthData.autoSavings.toLocaleString()}</>
-              )}
-            </span>
+            
           </div>
         </div>
         
@@ -241,7 +236,7 @@ const MonthlySummary: React.FC = () => {
           <div className="stat-content">
             <h3>Total Expenses</h3>
             <p className="stat-number">₹{currentMonthData.expenses.toLocaleString()}</p>
-            <span className="stat-change negative">+5.2% from last month</span>
+            
           </div>
         </div>
         
@@ -252,9 +247,7 @@ const MonthlySummary: React.FC = () => {
           <div className="stat-content">
             <h3>Net Savings</h3>
             <p className="stat-number">₹{currentMonthData.net.toLocaleString()}</p>
-            <span className={`stat-change ${currentMonthData.net >= 0 ? 'positive' : 'negative'}`}>
-              {currentMonthData.net >= 0 ? '+' : ''}₹{Math.abs(currentMonthData.net).toLocaleString()}
-            </span>
+            
           </div>
         </div>
       </motion.div>
