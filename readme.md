@@ -494,7 +494,6 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendly
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=7d
 
 # Email Configuration (Nodemailer)
 APP_MAIL=your-email@gmail.com
@@ -518,15 +517,9 @@ NODE_ENV=production
 ### 🎨 Client Configuration
 Create `client/.env`:
 ```env
-# API Configuration
-VITE_API_BASE_URL=http://localhost:4200
-VITE_APP_NAME=Spendly
-
 # Razorpay Configuration
 RAZORPAY_KEY_ID=your-razorpay-key-id
 
-# Environment
-VITE_NODE_ENV=production
 ```
 
 ---
@@ -616,10 +609,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 👨‍💻 Author
 
 **Prakhar Tripathi**
-- 🌐 Portfolio: [Your Portfolio URL]
-- 💼 LinkedIn: [Your LinkedIn Profile]
-- 📧 Email: [Your Email]
-- 🐙 GitHub: [Your GitHub Profile]
+- 🌐 Portfolio: https://imprakhartripathi.github.io/Portfolio/
+- 💼 LinkedIn: https://www.linkedin.com/in/imprakhartripathi/
+- 📧 Email: imprakhartripathiofficial@gmail.com
+- 🐙 GitHub: https://github.com/imprakhartripathi
 
 ---
 
@@ -638,5 +631,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **⭐ Star this repository if you found it helpful!**
 
 **Made with ❤️ by Prakhar Tripathi**
+
 
 </div>
