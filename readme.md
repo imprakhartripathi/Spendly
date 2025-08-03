@@ -1,76 +1,650 @@
+# 💰 Spendly - Personal Finance Management System
 
-*Project Title:* Personal Finance Tracker with Freemium Tier System
+<div align="center">
 
-*Prepared By:* Prakhar Tripathi
+![Spendly Logo](client/public/logo.png)
+
+**A comprehensive personal finance tracker with freemium tier system**
+
+[![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
+
+[🚀 Quick Start](#-quick-start) • [📖 Features](#-features) • [🛠️ Tech Stack](#️-technology-stack) • [🔒 Security](#-security) • [📚 API Documentation](#-api-documentation)
+
+</div>
 
 ---
 
-*1. Introduction*
+## 📋 Table of Contents
 
-This document outlines the software requirements for a web-based Personal Finance Tracker. The system is designed to help users track income, expenses, budgets, and view financial analytics. It will support a freemium model, offering different feature sets based on the user's tier: Free, Plus, and Premium.
+- [🎯 About Spendly](#-about-spendly)
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [🏗️ Architecture](#️-architecture)
+- [📚 API Documentation](#-api-documentation)
+- [🔒 Security](#-security)
+- [📱 User Interface](#-user-interface)
+- [💳 Subscription Tiers](#-subscription-tiers)
+- [🐳 Docker Deployment](#-docker-deployment)
+- [🔧 Development](#-development)
+- [📜 Scripts Overview](#-scripts-overview)
+- [🌐 Environment Variables](#-environment-variables)
+- [🧪 Testing](#-testing)
+- [📈 Performance](#-performance)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-*2. Overall Description*
+---
 
-The app will be built using the MERN stack (MongoDB, Express, React, Node.js). It will feature user authentication, income/expense tracking, budget management, and visual analytics. The UI will be responsive and accessible via modern browsers.
+## 🎯 About Spendly
 
-RBAC (Role-Based Access Control) will be implemented to control feature access according to subscription tier.
+**Spendly** is a modern, full-stack personal finance management application designed to help users track their income, expenses, budgets, and financial goals. Built with the MERN stack and featuring a comprehensive freemium model, Spendly offers different feature sets across Free, Plus, and Premium tiers.
 
-*3. System Features by Tier*
+### 🌟 Key Highlights
 
-*Free Tier:*
+- **💡 Smart Financial Tracking** - Intuitive expense and income management
+- **📊 Advanced Analytics** - Beautiful charts and spending insights
+- **🔄 Automated Features** - Recurring transactions and autopay (Premium)
+- **🎨 Modern UI/UX** - Responsive design with Material-UI components
+- **🔒 Enterprise Security** - JWT authentication with role-based access control
+- **🐳 Production Ready** - Dockerized deployment with optimized builds
+- **⚡ High Performance** - Fast loading with optimized caching strategies
 
-* User registration and login
-* Add/edit/delete income and expenses
-* View list of transactions
-* View basic monthly summary (total income and expenses)
+---
 
-*Plus Tier:*
+## ✨ Features
 
-* All Free features
-* Set and track budgets
-* Category-wise analytics (charts)
-* Download reports in .txt format
-* View spending trends by category
+### 🆓 Free Tier
+- ✅ **User Authentication** - Secure signup and login
+- ✅ **Transaction Management** - Add, edit, delete income and expenses
+- ✅ **Transaction History** - View all your financial transactions
+- ✅ **Basic Analytics** - Monthly income and expense summaries
+- ✅ **Responsive Design** - Works on all devices
 
-*Premium Tier:*
+### ⭐ Plus Tier ($9.99/month)
+- ✅ **All Free Features**
+- ✅ **Budget Management** - Set and track spending budgets
+- ✅ **Category Analytics** - Detailed charts by spending categories
+- ✅ **Trend Analysis** - Spending patterns over time
+- ✅ **Report Downloads** - Export data in TXT format
+- ✅ **Advanced Filtering** - Search and filter transactions
 
-* All Plus features
-* Advanced reports in downloadable PDF format
-* Recurring transactions setup
-* Alerts and reminders for bills/budget limits
-* Monthly financial goal tracking
-* Sync with external accounts (mock integration)
+### 🚀 Premium Tier ($19.99/month)
+- ✅ **All Plus Features**
+- ✅ **Autopay System** - Automated recurring transactions
+- ✅ **PDF Reports** - Professional downloadable reports
+- ✅ **Smart Notifications** - Bill reminders and budget alerts
+- ✅ **Goal Tracking** - Monthly financial goal management
+- ✅ **Account Sync** - Mock integration with external accounts
+- ✅ **Priority Support** - Dedicated customer support
 
-*4. Functional Requirements*
+---
 
-* FR1: The system shall allow users to create and manage their account.
-* FR2: The system shall allow users to record and edit income and expense entries.
-* FR3: The system shall restrict or grant access to features based on user tier.
-* FR4: The system shall generate financial summaries and charts based on transaction data.
-* FR5: The system shall allow Plus and Premium users to download reports.
-* FR6: The system shall notify Premium users with alerts/reminders for financial activities.
+## 🚀 Quick Start
 
-*5. Non-Functional Requirements*
+### 🎮 Interactive Runner (Recommended)
 
-* NFR1: The app shall respond within 2 seconds for user actions.
-* NFR2: The system should be scalable to support tier-based user access.
-* NFR3: Data should persist using MongoDB and be secured.
-* NFR4: The application should have unit tests for core features.
+The easiest way to get started is using our beautiful interactive runner scripts:
 
-*6. Constraints*
+#### Windows (PowerShell)
+```powershell
+.\run-spendly.ps1
+```
 
-* Total time for project completion: \~210 hours (6 weeks at \~35 hrs/week)
-* All features must be achievable with MERN stack, without reliance on paid third-party services.
-* Must maintain a clean, modular codebase to allow for future enhancements.
+#### Linux/macOS (Bash)
+```bash
+./run-spendly.sh
+```
 
-*7. Assumptions and Dependencies*
+### 🎯 Direct Commands
 
-* User base is individual users (not organizations).
-* Deployment can be done using services like Vercel/Render/Heroku.
-* Chrome or Firefox is the target browser for development.
+#### Production Mode (Docker)
+```powershell
+.\run-spendly.ps1 -Mode production
+# or
+docker-compose up -d
+```
 
-*8. Future Scope*
+#### Development Mode (Local)
+```powershell
+.\run-spendly.ps1 -Mode development
+```
 
-* Integration with real bank APIs for sync
-* Email invoice generation
-* Mobile version using React Native
+### 🌐 Access URLs
+
+| Environment | Frontend | Backend |
+|-------------|----------|---------|
+| **Production** | http://localhost:5000 | http://localhost:4200 |
+| **Development** | http://localhost:5173 | http://localhost:4200 |
+
+---
+
+## 🛠️ Technology Stack
+
+### 🎨 Frontend
+- **⚛️ React 19.1.0** - Modern UI library with latest features
+- **🔷 TypeScript 5.8.3** - Type-safe JavaScript development
+- **⚡ Vite 6.3.5** - Lightning-fast build tool and dev server
+- **🎨 Material-UI 7.2.0** - Beautiful, accessible React components
+- **📊 Recharts 3.1.0** - Responsive chart library for analytics
+- **🎭 Framer Motion 12.23.0** - Smooth animations and transitions
+- **🧭 React Router 7.6.3** - Client-side routing
+- **🌐 Axios 1.10.0** - HTTP client for API communication
+- **🎨 Sass 1.89.2** - Advanced CSS preprocessing
+
+### 🔧 Backend
+- **🟢 Node.js 20** - JavaScript runtime environment
+- **⚡ Express 4.21.2** - Fast, minimalist web framework
+- **🔷 TypeScript 5.7.2** - Type-safe server development
+- **🍃 MongoDB 6.14.2** - NoSQL database with Mongoose ODM
+- **🔐 JWT** - JSON Web Tokens for authentication
+- **🔒 bcrypt 6.0.0** - Password hashing and security
+- **📧 Nodemailer 6.10.0** - Email service integration
+- **💳 Razorpay 2.9.6** - Payment gateway integration
+- **⏰ node-cron 3.0.3** - Scheduled task automation
+- **🔄 Nodemon 3.1.9** - Development auto-restart
+
+### 🐳 DevOps & Deployment
+- **🐳 Docker** - Containerization for consistent deployments
+- **🌐 Nginx** - High-performance web server and reverse proxy
+- **📦 Docker Compose** - Multi-container application orchestration
+- **🔧 ESLint** - Code quality and consistency
+- **🎯 Vite** - Optimized production builds
+
+### 🗄️ Database
+- **🍃 MongoDB Atlas** - Cloud-hosted MongoDB database
+- **📊 Mongoose 8.9.6** - Elegant MongoDB object modeling
+- **🔍 Indexing** - Optimized query performance
+- **🔄 Aggregation Pipeline** - Complex data processing
+
+---
+
+## 🏗️ Architecture
+
+### 📁 Project Structure
+```
+Spendly/
+├── 🎨 client/                    # React frontend application
+│   ├── src/
+│   │   ├── components/           # Reusable UI components
+│   │   ├── utils/               # Utility functions
+│   │   ├── assets/              # Static assets
+│   │   └── main.tsx             # Application entry point
+│   ├── public/                  # Public static files
+│   ├── dockerfile               # Client Docker configuration
+│   ├── nginx.conf               # Nginx server configuration
+│   └── package.json             # Frontend dependencies
+├── 🔧 server/                   # Node.js backend application
+│   ├── src/
+│   │   ├── controllers/         # Request handlers
+│   │   ├── middleware/          # Custom middleware
+│   │   ├── mongodb/             # Database models and config
+│   │   ├── services/            # Business logic services
+│   │   ├── router.ts            # API route definitions
+│   │   └── server.ts            # Server entry point
+│   ├── dockerfile               # Server Docker configuration
+│   └── package.json             # Backend dependencies
+├── 🐳 docker-compose.yml        # Multi-container orchestration
+├── 🚀 run-spendly.ps1          # Interactive Windows runner
+├── 🚀 run-spendly.sh           # Interactive Unix runner
+└── 📚 Documentation files
+```
+
+### 🔄 Data Flow
+1. **Client Request** → React components make API calls via Axios
+2. **Authentication** → JWT middleware validates user tokens
+3. **Authorization** → Role-based access control checks user permissions
+4. **Business Logic** → Controllers process requests and validate data
+5. **Database** → MongoDB operations via Mongoose ODM
+6. **Response** → JSON data returned to client
+7. **UI Update** → React components re-render with new data
+
+---
+
+## 📚 API Documentation
+
+### 🔐 Authentication Endpoints
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `POST` | `/signup` | User registration | Public |
+| `POST` | `/login` | User authentication | Public |
+| `GET` | `/check-token` | Validate JWT token | Public |
+| `GET` | `/getuserinfo` | Get user profile | Authenticated |
+
+### 👤 User Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `PATCH` | `/user/edit/:id` | Update user profile | Owner |
+| `DELETE` | `/user/delete/:id` | Delete user account | Owner |
+
+### 💰 Transaction Management
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `POST` | `/user/:id/add/transection` | Create new transaction | Owner |
+| `GET` | `/user/:id/transections` | Get all transactions | Owner |
+| `GET` | `/user/:id/transection` | Get specific transaction | Owner |
+| `GET` | `/user/:id/search/transections` | Search transactions | Owner |
+| `PATCH` | `/user/:id/edit/transection` | Update transaction | Owner |
+| `DELETE` | `/user/:id/delete/transection` | Delete transaction | Owner |
+
+### 🔔 Notification System
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `GET` | `/user/:id/notifications` | Get user notifications | Owner |
+| `PATCH` | `/user/:id/notifications/read` | Mark notifications as read | Owner |
+| `DELETE` | `/user/:id/notifications/clear` | Clear all notifications | Owner |
+
+### 🔄 Autopay (Premium Only)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `GET` | `/user/:id/autopay` | Get autopay transactions | Premium |
+| `POST` | `/user/:id/autopay` | Create autopay rule | Premium |
+| `PATCH` | `/user/:id/autopay` | Update autopay rule | Premium |
+| `DELETE` | `/user/:id/autopay` | Delete autopay rule | Premium |
+
+### 💳 Payment Integration
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `POST` | `/create-subscription` | Create Razorpay subscription | Authenticated |
+| `POST` | `/verify-payment/:id` | Verify payment status | Owner |
+| `POST` | `/cancel-subs/:id` | Cancel subscription | Owner |
+
+### 🛠️ Admin Endpoints
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|---------|
+| `POST` | `/admin/process-monthly-savings` | Process monthly savings | Admin |
+| `POST` | `/admin/send-savings-reminder` | Send savings reminders | Admin |
+
+---
+
+## 🔒 Security
+
+### 🛡️ Authentication & Authorization
+- **JWT Tokens** - Secure, stateless authentication
+- **Password Hashing** - bcrypt with salt rounds for password security
+- **Token Expiry** - Automatic session management
+- **Role-Based Access Control (RBAC)** - Tier-based feature access
+- **Ownership Middleware** - Users can only access their own data
+
+### 🔐 Data Protection
+- **Input Validation** - Comprehensive request validation
+- **SQL Injection Prevention** - MongoDB's built-in protection
+- **XSS Protection** - Content sanitization and security headers
+- **CORS Configuration** - Controlled cross-origin requests
+- **Environment Variables** - Sensitive data stored securely
+
+### 🌐 Network Security
+- **HTTPS Ready** - SSL/TLS encryption support
+- **Security Headers** - Comprehensive HTTP security headers
+- **Rate Limiting** - API abuse prevention (configurable)
+- **Request Size Limits** - Protection against large payload attacks
+
+### 🔍 Security Headers Implemented
+```nginx
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+---
+
+## 📱 User Interface
+
+### 🎨 Design System
+- **Material Design 3** - Modern, accessible design language
+- **Responsive Layout** - Mobile-first approach with breakpoints
+- **Dark/Light Theme** - User preference support
+- **Accessibility** - WCAG 2.1 AA compliance
+- **Smooth Animations** - Framer Motion for delightful interactions
+
+### 📊 Key Components
+- **📈 Dashboard** - Financial overview with key metrics
+- **💰 Transaction Manager** - Add, edit, and categorize transactions
+- **📊 Analytics Charts** - Interactive spending visualizations
+- **🎯 Budget Tracker** - Visual budget progress indicators
+- **🔔 Notification Center** - Real-time alerts and reminders
+- **⚙️ Settings Panel** - User preferences and account management
+
+### 📱 Responsive Breakpoints
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+---
+
+## 💳 Subscription Tiers
+
+### 🆓 Free Tier - $0/month
+Perfect for basic personal finance tracking
+- ✅ Unlimited transactions
+- ✅ Basic monthly summaries
+- ✅ Mobile responsive interface
+- ✅ Secure data storage
+
+### ⭐ Plus Tier - $9.99/month
+Enhanced features for serious budgeters
+- ✅ **Everything in Free**
+- ✅ Advanced budget management
+- ✅ Category-wise analytics
+- ✅ Spending trend analysis
+- ✅ TXT report downloads
+- ✅ Transaction search & filters
+
+### 🚀 Premium Tier - $19.99/month
+Complete financial management solution
+- ✅ **Everything in Plus**
+- ✅ Automated recurring transactions
+- ✅ Professional PDF reports
+- ✅ Smart bill reminders
+- ✅ Financial goal tracking
+- ✅ Account sync capabilities
+- ✅ Priority customer support
+
+---
+
+## 🐳 Docker Deployment
+
+### 🚀 Production Deployment
+
+#### Quick Start
+```bash
+# Using interactive script (recommended)
+.\run-spendly.ps1 -Mode production
+
+# Or directly with Docker Compose
+docker-compose up -d
+```
+
+#### Fresh Build
+```bash
+# Complete rebuild with latest changes
+.\build-fresh.ps1
+```
+
+### 📦 Container Details
+
+#### 🎨 Client Container
+- **Base Image**: `nginx:alpine` (81.7MB)
+- **Build Process**: Multi-stage build with Node.js 20
+- **Features**: Gzip compression, SPA routing, security headers
+- **Port**: 5000 → 80
+
+#### 🔧 Server Container
+- **Base Image**: `node:20-alpine` (367MB)
+- **Runtime**: TypeScript with ts-node and nodemon
+- **Features**: Hot reload, MongoDB connection, cron jobs
+- **Port**: 4200 → 4200
+
+### 🔧 Docker Optimizations
+- ✅ Multi-stage builds for smaller images
+- ✅ .dockerignore files for faster builds
+- ✅ Layer caching optimization
+- ✅ Production-ready Nginx configuration
+- ✅ Health checks and restart policies
+
+---
+
+## 🔧 Development
+
+### 🛠️ Prerequisites
+- **Node.js 20+** - JavaScript runtime
+- **npm 10+** - Package manager
+- **MongoDB Atlas** - Database (or local MongoDB)
+- **Docker** - For containerized development (optional)
+
+### 🚀 Development Setup
+
+#### Using Interactive Script (Recommended)
+```bash
+.\run-spendly.ps1 -Mode development
+```
+
+#### Manual Setup
+```bash
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
+
+# Start development servers
+# Terminal 1 - Backend
+cd server && npm start
+
+# Terminal 2 - Frontend
+cd client && npm run dev
+```
+
+### 🔄 Development Features
+- **⚡ Hot Module Replacement** - Instant UI updates
+- **🔄 Auto-restart** - Server restarts on file changes
+- **🗺️ Source Maps** - Easy debugging
+- **🎯 Error Overlay** - Development error display
+- **📊 Dev Tools** - React and Redux DevTools support
+
+### 🧪 Available Scripts
+
+#### Server Scripts
+```bash
+npm start          # Start with nodemon (development)
+npm run fresh      # Clear console and start
+npm run setup      # Install, fund, and start
+```
+
+#### Client Scripts
+```bash
+npm run dev        # Start Vite dev server
+npm run build      # Build for production
+npm run preview    # Preview production build
+npm run lint       # Run ESLint
+```
+
+---
+
+## 📜 Scripts Overview
+
+### 🎮 Interactive Runners
+
+#### `run-spendly.ps1` (Windows PowerShell)
+Beautiful, interactive script with:
+- 🎨 ASCII art banner and colorful logging
+- 🎯 Interactive mode selection
+- 🔍 Automatic dependency detection
+- 🛡️ Comprehensive error handling
+- 🪟 Separate terminal windows for dev servers
+
+#### `run-spendly.sh` (Linux/macOS Bash)
+Cross-platform script featuring:
+- 🌈 Same beautiful interface as PowerShell
+- 🔄 Background process management
+- 📝 Auto-creation of stop scripts
+- 🐧 Native Unix tools integration
+
+### 🐳 Docker Scripts
+
+#### `build-fresh.ps1`
+Complete Docker rebuild script:
+- 🧹 Cleans existing containers and images
+- 🔨 Builds fresh images without cache
+- 🚀 Starts application in production mode
+- 📊 Shows final status and URLs
+
+#### `spendly.ps1`
+Quick launcher for shortcuts:
+- 📍 Can be run from anywhere
+- 🎯 Automatically navigates to project directory
+- ⚡ Passes arguments to main runner
+
+### 📚 Documentation
+- `DOCKER_DEPLOYMENT.md` - Complete Docker guide
+- `RUNNER_SCRIPTS.md` - Detailed script documentation
+- `SCRIPTS_OVERVIEW.md` - Quick reference guide
+
+---
+
+## 🌐 Environment Variables
+
+### 🔧 Server Configuration
+Create `server/src/.env`:
+```env
+# Database
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendly
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=7d
+
+# Email Configuration (Nodemailer)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+
+# Razorpay Configuration
+RAZORPAY_KEY_ID=your-razorpay-key-id
+RAZORPAY_KEY_SECRET=your-razorpay-key-secret
+
+# Server Configuration
+PORT=4200
+NODE_ENV=production
+```
+
+### 🎨 Client Configuration
+Create `client/.env`:
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:4200
+VITE_APP_NAME=Spendly
+
+# Razorpay Configuration
+VITE_RAZORPAY_KEY_ID=your-razorpay-key-id
+
+# Environment
+VITE_NODE_ENV=production
+```
+
+---
+
+## 🧪 Testing
+
+### 🔬 Testing Strategy
+- **Unit Tests** - Individual component and function testing
+- **Integration Tests** - API endpoint testing
+- **E2E Tests** - Full user workflow testing
+- **Security Tests** - Authentication and authorization testing
+
+### 🛠️ Testing Tools
+- **Jest** - JavaScript testing framework
+- **React Testing Library** - React component testing
+- **Supertest** - HTTP assertion library
+- **MongoDB Memory Server** - In-memory database for testing
+
+### 🚀 Running Tests
+```bash
+# Server tests
+cd server && npm test
+
+# Client tests
+cd client && npm test
+
+# Coverage reports
+npm run test:coverage
+```
+
+---
+
+## 📈 Performance
+
+### ⚡ Optimization Features
+- **Code Splitting** - Lazy loading of components
+- **Tree Shaking** - Unused code elimination
+- **Image Optimization** - Compressed and responsive images
+- **Caching Strategy** - Browser and server-side caching
+- **Bundle Analysis** - Webpack bundle analyzer integration
+
+### 📊 Performance Metrics
+- **First Contentful Paint** - < 1.5s
+- **Largest Contentful Paint** - < 2.5s
+- **Time to Interactive** - < 3.5s
+- **Cumulative Layout Shift** - < 0.1
+
+### 🔧 Database Optimization
+- **Indexing** - Optimized database queries
+- **Aggregation Pipeline** - Efficient data processing
+- **Connection Pooling** - Optimized database connections
+- **Query Optimization** - Minimized database calls
+
+---
+
+## 🤝 Contributing
+
+### 🌟 How to Contribute
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### 📋 Development Guidelines
+- Follow **TypeScript** best practices
+- Write **comprehensive tests** for new features
+- Update **documentation** for API changes
+- Follow **conventional commits** format
+- Ensure **responsive design** for UI changes
+
+### 🐛 Bug Reports
+Please include:
+- **Environment details** (OS, Node.js version, browser)
+- **Steps to reproduce** the issue
+- **Expected vs actual behavior**
+- **Screenshots** if applicable
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Prakhar Tripathi**
+- 🌐 Portfolio: [Your Portfolio URL]
+- 💼 LinkedIn: [Your LinkedIn Profile]
+- 📧 Email: [Your Email]
+- 🐙 GitHub: [Your GitHub Profile]
+
+---
+
+## 🙏 Acknowledgments
+
+- **Material-UI Team** - For the beautiful component library
+- **MongoDB Team** - For the excellent database solution
+- **React Team** - For the amazing frontend framework
+- **Node.js Community** - For the robust backend runtime
+- **Docker Team** - For containerization technology
+
+---
+
+<div align="center">
+
+**⭐ Star this repository if you found it helpful!**
+
+**Made with ❤️ by Prakhar Tripathi**
+
+</div>
