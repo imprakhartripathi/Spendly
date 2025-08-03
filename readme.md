@@ -65,22 +65,17 @@
 - ✅ **Basic Analytics** - Monthly income and expense summaries
 - ✅ **Responsive Design** - Works on all devices
 
-### ⭐ Plus Tier ($9.99/month)
+### ⭐ Plus Tier (₹99/month)
 - ✅ **All Free Features**
 - ✅ **Budget Management** - Set and track spending budgets
 - ✅ **Category Analytics** - Detailed charts by spending categories
-- ✅ **Trend Analysis** - Spending patterns over time
-- ✅ **Report Downloads** - Export data in TXT format
-- ✅ **Advanced Filtering** - Search and filter transactions
+- ✅ **Trend Analysis** - View spending trends by category
 
-### 🚀 Premium Tier ($19.99/month)
+### 🚀 Premium Tier (₹199/month)
 - ✅ **All Plus Features**
-- ✅ **Autopay System** - Automated recurring transactions
-- ✅ **PDF Reports** - Professional downloadable reports
-- ✅ **Smart Notifications** - Bill reminders and budget alerts
-- ✅ **Goal Tracking** - Monthly financial goal management
-- ✅ **Account Sync** - Mock integration with external accounts
-- ✅ **Priority Support** - Dedicated customer support
+- ✅ **Recurring Transactions** - Automated recurring transaction setup
+- ✅ **Smart Notifications** - Alerts and reminders for bills/budget limits
+- ✅ **Goal Tracking** - Monthly financial goal tracking
 
 ---
 
@@ -92,7 +87,7 @@ The easiest way to get started is using our beautiful interactive runner scripts
 
 #### Windows (PowerShell)
 ```powershell
-.\run-spendly.ps1
+.\start-spendly.ps1
 ```
 
 #### Linux/macOS (Bash)
@@ -104,14 +99,14 @@ The easiest way to get started is using our beautiful interactive runner scripts
 
 #### Production Mode (Docker)
 ```powershell
-.\run-spendly.ps1 -Mode production
+.\start-spendly.ps1 -Mode production
 # or
 docker-compose up -d
 ```
 
 #### Development Mode (Local)
 ```powershell
-.\run-spendly.ps1 -Mode development
+.\start-spendly.ps1 -Mode development
 ```
 
 ### 🌐 Access URLs
@@ -189,8 +184,9 @@ Spendly/
 │   ├── dockerfile               # Server Docker configuration
 │   └── package.json             # Backend dependencies
 ├── 🐳 docker-compose.yml        # Multi-container orchestration
-├── 🚀 run-spendly.ps1          # Interactive Windows runner
+├── 🚀 start-spendly.ps1        # Interactive Windows runner
 ├── 🚀 run-spendly.sh           # Interactive Unix runner
+├── 🔨 build-fresh.ps1          # Fresh Docker build script
 └── 📚 Documentation files
 ```
 
@@ -333,23 +329,19 @@ Perfect for basic personal finance tracking
 - ✅ Mobile responsive interface
 - ✅ Secure data storage
 
-### ⭐ Plus Tier - $9.99/month
+### ⭐ Plus Tier - ₹99/month
 Enhanced features for serious budgeters
 - ✅ **Everything in Free**
-- ✅ Advanced budget management
-- ✅ Category-wise analytics
-- ✅ Spending trend analysis
-- ✅ TXT report downloads
-- ✅ Transaction search & filters
+- ✅ Set and track budgets
+- ✅ Category-wise analytics (charts)
+- ✅ View spending trends by category
 
-### 🚀 Premium Tier - $19.99/month
+### 🚀 Premium Tier - ₹199/month
 Complete financial management solution
 - ✅ **Everything in Plus**
-- ✅ Automated recurring transactions
-- ✅ Professional PDF reports
-- ✅ Smart bill reminders
-- ✅ Financial goal tracking
-- ✅ Account sync capabilities
+- ✅ Recurring transactions setup
+- ✅ Alerts and reminders for bills/budget limits
+- ✅ Monthly financial goal tracking
 - ✅ Priority customer support
 
 ---
@@ -361,7 +353,7 @@ Complete financial management solution
 #### Quick Start
 ```bash
 # Using interactive script (recommended)
-.\run-spendly.ps1 -Mode production
+.\start-spendly.ps1 -Mode production
 
 # Or directly with Docker Compose
 docker-compose up -d
@@ -408,7 +400,7 @@ docker-compose up -d
 
 #### Using Interactive Script (Recommended)
 ```bash
-.\run-spendly.ps1 -Mode development
+.\start-spendly.ps1 -Mode development
 ```
 
 #### Manual Setup
@@ -459,7 +451,7 @@ npm run lint       # Run ESLint
 
 ### 🎮 Interactive Runners
 
-#### `run-spendly.ps1` (Windows PowerShell)
+#### `start-spendly.ps1` (Windows PowerShell)
 Beautiful, interactive script with:
 - 🎨 ASCII art banner and colorful logging
 - 🎯 Interactive mode selection
@@ -483,11 +475,7 @@ Complete Docker rebuild script:
 - 🚀 Starts application in production mode
 - 📊 Shows final status and URLs
 
-#### `spendly.ps1`
-Quick launcher for shortcuts:
-- 📍 Can be run from anywhere
-- 🎯 Automatically navigates to project directory
-- ⚡ Passes arguments to main runner
+
 
 ### 📚 Documentation
 - `DOCKER_DEPLOYMENT.md` - Complete Docker guide
@@ -509,17 +497,21 @@ JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=7d
 
 # Email Configuration (Nodemailer)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+APP_MAIL=your-email@gmail.com
+MAIL_PASS=your-app-password
 
 # Razorpay Configuration
 RAZORPAY_KEY_ID=your-razorpay-key-id
 RAZORPAY_KEY_SECRET=your-razorpay-key-secret
 
+# Subscription Plan IDs
+PLUS_ID=your-plus-plan-id
+PREMIUM_ID=your-premium-plan-id
+
 # Server Configuration
 PORT=4200
+CLIENT_PORT=5000
+TUNNEL_URL=your-tunnel-url
 NODE_ENV=production
 ```
 
@@ -531,7 +523,7 @@ VITE_API_BASE_URL=http://localhost:4200
 VITE_APP_NAME=Spendly
 
 # Razorpay Configuration
-VITE_RAZORPAY_KEY_ID=your-razorpay-key-id
+RAZORPAY_KEY_ID=your-razorpay-key-id
 
 # Environment
 VITE_NODE_ENV=production
