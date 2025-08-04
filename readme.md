@@ -114,7 +114,7 @@ docker-compose up -d
 | Environment | Frontend | Backend |
 |-------------|----------|---------|
 | **Production** | http://localhost:5000 | http://localhost:4200 |
-| **Development** | http://localhost:5173 | http://localhost:4200 |
+| **Development** | http://localhost:5000 | http://localhost:4200 |
 
 ---
 
@@ -631,5 +631,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](Lisence) 
 
 
 </div>
+
 
 
