@@ -599,7 +599,7 @@ Please include:
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](Lisence) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](https://github.com/imprakhartripathi/Spendly/blob/main/License) file for details.
 
 ---
 
@@ -631,6 +631,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](Lisence) 
 
 
 </div>
+
 
 
 
