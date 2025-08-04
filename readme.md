@@ -301,7 +301,6 @@ Referrer-Policy: strict-origin-when-cross-origin
 ### 🎨 Design System
 - **Material Design 3** - Modern, accessible design language
 - **Responsive Layout** - Mobile-first approach with breakpoints
-- **Dark/Light Theme** - User preference support
 - **Accessibility** - WCAG 2.1 AA compliance
 - **Smooth Animations** - Framer Motion for delightful interactions
 
@@ -494,7 +493,6 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendly
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=7d
 
 # Email Configuration (Nodemailer)
 APP_MAIL=your-email@gmail.com
@@ -516,15 +514,9 @@ CLIENT_PORT=5000
 ### 🎨 Client Configuration
 Create `client/.env`:
 ```env
-# API Configuration
-VITE_API_BASE_URL=http://localhost:4200
-VITE_APP_NAME=Spendly
-
 # Razorpay Configuration
 RAZORPAY_KEY_ID=your-razorpay-key-id
 
-# Environment
-VITE_NODE_ENV=production
 ```
 
 ---
@@ -607,17 +599,17 @@ Please include:
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](Lisence) file for details.
 
 ---
 
 ## 👨‍💻 Author
 
 **Prakhar Tripathi**
-- 🌐 Portfolio: [Your Portfolio URL]
-- 💼 LinkedIn: [Your LinkedIn Profile]
-- 📧 Email: [Your Email]
-- 🐙 GitHub: [Your GitHub Profile]
+- 🌐 Portfolio: https://imprakhartripathi.github.io/Portfolio/
+- 💼 LinkedIn: https://www.linkedin.com/in/imprakhartripathi/
+- 📧 Email: imprakhartripathiofficial@gmail.com
+- 🐙 GitHub: https://github.com/imprakhartripathi
 
 ---
 
@@ -637,4 +629,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Made with ❤️ by Prakhar Tripathi**
 
+
 </div>
+
+
