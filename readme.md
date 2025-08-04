@@ -301,7 +301,6 @@ Referrer-Policy: strict-origin-when-cross-origin
 ### 🎨 Design System
 - **Material Design 3** - Modern, accessible design language
 - **Responsive Layout** - Mobile-first approach with breakpoints
-- **Dark/Light Theme** - User preference support
 - **Accessibility** - WCAG 2.1 AA compliance
 - **Smooth Animations** - Framer Motion for delightful interactions
 
@@ -634,4 +633,5 @@ This project is licensed under the **MIT License** - see the [LICENSE](Lisence) 
 
 
 </div>
+
 
