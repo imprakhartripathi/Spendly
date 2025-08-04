@@ -87,26 +87,26 @@ The easiest way to get started is using our beautiful interactive runner scripts
 
 #### Windows (PowerShell)
 ```powershell
-.\start-spendly.ps1
+.\start.ps1
 ```
 
 #### Linux/macOS (Bash)
 ```bash
-./run-spendly.sh
+./start.sh
 ```
 
 ### 🎯 Direct Commands
 
 #### Production Mode (Docker)
 ```powershell
-.\start-spendly.ps1 -Mode production
+.\start.ps1 -Mode production
 # or
 docker-compose up -d
 ```
 
 #### Development Mode (Local)
 ```powershell
-.\start-spendly.ps1 -Mode development
+.\start.ps1 -Mode development
 ```
 
 ### 🌐 Access URLs
@@ -184,8 +184,8 @@ Spendly/
 │   ├── dockerfile               # Server Docker configuration
 │   └── package.json             # Backend dependencies
 ├── 🐳 docker-compose.yml        # Multi-container orchestration
-├── 🚀 start-spendly.ps1        # Interactive Windows runner
-├── 🚀 run-spendly.sh           # Interactive Unix runner
+├── 🚀 start.ps1        # Interactive Windows runner
+├── 🚀 start.sh           # Interactive Unix runner
 ├── 🔨 build-fresh.ps1          # Fresh Docker build script
 └── 📚 Documentation files
 ```
@@ -353,7 +353,7 @@ Complete financial management solution
 #### Quick Start
 ```bash
 # Using interactive script (recommended)
-.\start-spendly.ps1 -Mode production
+.\start.ps1 -Mode production
 
 # Or directly with Docker Compose
 docker-compose up -d
@@ -400,7 +400,7 @@ docker-compose up -d
 
 #### Using Interactive Script (Recommended)
 ```bash
-.\start-spendly.ps1 -Mode development
+.\start.ps1 -Mode development
 ```
 
 #### Manual Setup
@@ -451,7 +451,7 @@ npm run lint       # Run ESLint
 
 ### 🎮 Interactive Runners
 
-#### `start-spendly.ps1` (Windows PowerShell)
+#### `start.ps1` (Windows PowerShell)
 Beautiful, interactive script with:
 - 🎨 ASCII art banner and colorful logging
 - 🎯 Interactive mode selection
@@ -459,7 +459,7 @@ Beautiful, interactive script with:
 - 🛡️ Comprehensive error handling
 - 🪟 Separate terminal windows for dev servers
 
-#### `run-spendly.sh` (Linux/macOS Bash)
+#### `start.sh` (Linux/macOS Bash)
 Cross-platform script featuring:
 - 🌈 Same beautiful interface as PowerShell
 - 🔄 Background process management
@@ -511,8 +511,6 @@ PREMIUM_ID=your-premium-plan-id
 # Server Configuration
 PORT=4200
 CLIENT_PORT=5000
-TUNNEL_URL=your-tunnel-url
-NODE_ENV=production
 ```
 
 ### 🎨 Client Configuration

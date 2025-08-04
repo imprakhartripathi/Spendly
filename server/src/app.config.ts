@@ -23,9 +23,9 @@ export const corsConfig = {
     ];
 
     // Allow ngrok during dev (any subdomain)
-    if (origin?.includes("ngrok-free.app")) {
-      return callback(null, true);
-    }
+    // if (origin?.includes("ngrok-free.app")) {
+    //   return callback(null, true);
+    // }
 
     // Allow from whitelist
     if (!origin || allowedOrigins.includes(origin)) {
