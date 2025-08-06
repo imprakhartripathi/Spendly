@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../mongodb/schematics/User";
 import { assessTransactionAndNotify } from "./budget.assessment.controller";
 import { NotificationType } from "../mongodb/schematics/Notifications";
+import { TransectionType } from "../mongodb/schematics/Transections";
 
 export const createTransection = async (
   req: Request,
@@ -30,10 +31,10 @@ export const createTransection = async (
       user.fullName,
       user.email,
       transection.amount,
-      user.income,
       transection.spentOn,
       new Date().toISOString(),
-      NotificationType.Budget
+      NotificationType.Budget,
+      transection.transectionType
     );
   } catch (err) {
     next(err);
@@ -140,10 +141,10 @@ export const updateTransection = async (
         user.fullName,
         user.email,
         updates.amount,
-        user.income,
         transection.spentOn,
         new Date().toISOString(),
-        NotificationType.Budget
+        NotificationType.Budget,
+        transection.transectionType
       );
     }
   } catch (err) {
@@ -212,47 +213,48 @@ export const searchTransections = async (
     let filteredTransections = user.transections;
 
     // Text search in spentOn and spentOnDesc
-    if (query && typeof query === 'string') {
+    if (query && typeof query === "string") {
       const searchQuery = query.toLowerCase();
-      filteredTransections = filteredTransections.filter(t => 
-        t.spentOn.toLowerCase().includes(searchQuery) ||
-        t.spentOnDesc.toLowerCase().includes(searchQuery) ||
-        t.category.toLowerCase().includes(searchQuery)
+      filteredTransections = filteredTransections.filter(
+        (t) =>
+          t.spentOn.toLowerCase().includes(searchQuery) ||
+          t.spentOnDesc.toLowerCase().includes(searchQuery) ||
+          t.category.toLowerCase().includes(searchQuery)
       );
     }
 
     // Filter by category
-    if (category && typeof category === 'string') {
-      filteredTransections = filteredTransections.filter(t => 
-        t.category.toLowerCase() === category.toLowerCase()
+    if (category && typeof category === "string") {
+      filteredTransections = filteredTransections.filter(
+        (t) => t.category.toLowerCase() === category.toLowerCase()
       );
     }
 
     // Filter by transaction type
-    if (type && typeof type === 'string') {
-      filteredTransections = filteredTransections.filter(t => 
-        t.transectionType === type
+    if (type && typeof type === "string") {
+      filteredTransections = filteredTransections.filter(
+        (t) => t.transectionType === type
       );
     }
 
     // Filter by date range
-    if (startDate && typeof startDate === 'string') {
+    if (startDate && typeof startDate === "string") {
       const start = new Date(startDate);
-      filteredTransections = filteredTransections.filter(t => 
-        new Date(t.onDate) >= start
+      filteredTransections = filteredTransections.filter(
+        (t) => new Date(t.onDate) >= start
       );
     }
 
-    if (endDate && typeof endDate === 'string') {
+    if (endDate && typeof endDate === "string") {
       const end = new Date(endDate);
-      filteredTransections = filteredTransections.filter(t => 
-        new Date(t.onDate) <= end
+      filteredTransections = filteredTransections.filter(
+        (t) => new Date(t.onDate) <= end
       );
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       transections: filteredTransections,
-      count: filteredTransections.length 
+      count: filteredTransections.length,
     });
   } catch (err) {
     next(err);

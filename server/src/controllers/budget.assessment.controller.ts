@@ -1,4 +1,5 @@
 import { NotificationType } from "../mongodb/schematics/Notifications";
+import { TransectionType } from "../mongodb/schematics/Transections";
 import User, { IUser } from "../mongodb/schematics/User";
 import { 
   sendAutopayReminderEmail, 
@@ -12,19 +13,48 @@ export async function assessTransactionAndNotify(
   name: string,
   email: string,
   amount: number,
-  income: number,
   spentOn: string,
   time: string,
-  type: NotificationType
+  nType: NotificationType,
+  tType: TransectionType
 ): Promise<void> {
-  const percentage = (amount / income) * 100;
+  try {
+    const user = await User.findOne({ email });
 
-  if (percentage >= 20) {
-    await sendVeryLargeTransectionEmail(name, email, amount, spentOn, time, type);
-  } else if (percentage >= 15) {
-    await sendLargeTransectionEmail(name, email, amount, spentOn, time, type);
-  } else if (percentage >= 10) {
-    await sendSignificantTransectionEmail(name, email, amount, spentOn, time, type);
+    if (!user) {
+      console.error(`User not found for email: ${email}`);
+      return;
+    }
+    // If no monthly budget set, skip
+    if (!user.monthlyBudget || user.monthlyBudget <= 0) {
+      console.log(`Skipping transaction check for ${email} - no budget set`);
+      return;
+    }
+
+    if(tType === TransectionType.Credit){
+      console.log(`Skipping transaction check for ${email} - as its a Credit Transection`);
+      return;
+    }
+
+    const totalSpent = user.transections.reduce((acc, t) => acc + t.amount, 0);
+    const remainingBudget = user.monthlyBudget - totalSpent;
+
+    if (remainingBudget <= 0) {
+      console.log(`Skipping transaction check for ${email} - budget already exceeded`);
+      return;
+    }
+
+    const percentage = (amount / remainingBudget) * 100;
+
+    if (percentage >= 20) {
+      await sendVeryLargeTransectionEmail(name, email, amount, spentOn, time, nType);
+    } else if (percentage >= 15) {
+      await sendLargeTransectionEmail(name, email, amount, spentOn, time, nType);
+    } else if (percentage >= 10) {
+      await sendSignificantTransectionEmail(name, email, amount, spentOn, time, nType);
+    }
+  } catch (error) {
+    console.error("Error assessing transaction:", error);
   }
 }
 

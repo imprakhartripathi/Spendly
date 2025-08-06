@@ -157,7 +157,7 @@ export async function sendSignificantTransectionEmail(
           <h2 style="color:rgb(46, 151, 204);">You've made a Significant Transaction!</h2>
           <hr/>
           <p>Hello ${name},</p>
-          <p>We noticed a transaction of ₹${amount} on ${spentOn}. This is over <strong>10%</strong> of your monthly income in a single transaction.</p>
+          <p>We noticed a transaction of ₹${amount} on ${spentOn}. This is over <strong>10%</strong> of your remaining budget in a single transaction.</p>
           <p>We advise you to monitor your budget closely to maintain financial stability.</p>
           <hr/>
           <p>Notification Type: ${type}</p>
@@ -193,7 +193,7 @@ export async function sendLargeTransectionEmail(
           <h2 style="color:rgb(255, 165, 0);">Large Expense Alert!</h2>
           <hr/>
           <p>Hello ${name},</p>
-          <p>You've just made a transaction of ₹${amount} on ${spentOn}, which is over <strong>15%</strong> of your monthly income.</p>
+          <p>You've just made a transaction of ₹${amount} on ${spentOn}, which is over <strong>15%</strong> of your remaining budget.</p>
           <p>This is a large expense — be sure you're aligned with your financial priorities for the month.</p>
           <hr/>
           <p>Notification Type: ${type}</p>
@@ -226,7 +226,7 @@ export async function sendVeryLargeTransectionEmail(
           <h2 style="color:rgb(204, 0, 0);">🚨 Very Large Expenditure!</h2>
           <hr/>
           <p>Hello ${name},</p>
-          <p>You've made a transaction of ₹${amount} on ${spentOn}, which is over <strong>20%</strong> of your monthly income.</p>
+          <p>You've made a transaction of ₹${amount} on ${spentOn}, which is over <strong>20%</strong> of your remaining budget.</p>
           <p>This is a very large expenditure and should be intentional. Please reassess your budget to ensure you're on track financially.</p>
           <hr/>
           <p>Notification Type: ${type}</p>
