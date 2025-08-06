@@ -1,3 +1,4 @@
+import cron from "node-cron";
 import { NotificationType } from "../mongodb/schematics/Notifications";
 import { TransectionType } from "../mongodb/schematics/Transections";
 import User, { IUser } from "../mongodb/schematics/User";
@@ -8,6 +9,8 @@ import {
   sendSignificantTransectionEmail,
   sendVeryLargeTransectionEmail 
 } from "../services/email.service";
+
+// ================== EXISTING FUNCTIONS ==================
 
 export async function assessTransactionAndNotify(
   name: string,
@@ -26,19 +29,16 @@ export async function assessTransactionAndNotify(
       return;
     }
 
-    // If no monthly budget set, skip
     if (!user.monthlyBudget || user.monthlyBudget <= 0) {
       console.log(`Skipping transaction check for ${email} - no budget set`);
       return;
     }
 
-    // Skip if this is a Credit transaction
     if (tType === TransectionType.Credit) {
       console.log(`Skipping transaction check for ${email} - Credit Transaction`);
       return;
     }
 
-    // Only count debit transactions for total spent
     const totalSpent = user.transections
       .filter(t => t.transectionType === TransectionType.Debit)
       .reduce((acc, t) => acc + t.amount, 0);
@@ -64,17 +64,15 @@ export async function assessTransactionAndNotify(
   }
 }
 
-// balance check (checking for below 20%)
 export async function checkAndNotifyLowBalances(): Promise<void> {
   try {
     const users = await User.find();
 
     for (const user of users) {
       if (!user.monthlyBudget || user.monthlyBudget <= 0) {
-        continue; // Skip users without a budget
+        continue; 
       }
 
-      // Only count debit transactions for total spent
       const totalSpent = user.transections
         .filter(t => t.transectionType === TransectionType.Debit)
         .reduce((acc, t) => acc + t.amount, 0);
@@ -113,3 +111,36 @@ export const checkAndNotifyAutopayTransactions = async (user: IUser): Promise<vo
     console.error("Autopay reminder notification failed:", error);
   }
 };
+
+// ================== NEW CRON SCHEDULER ==================
+
+export function scheduleDailyBudgetAndAutopayChecks(): void {
+  // Runs at 9:00 AM every day
+  cron.schedule("0 9 * * *", async () => {
+    console.log("[Cron] Running daily budget & autopay check (9AM)...");
+    await runDailyChecks();
+  });
+
+  // Runs at 9:00 PM every day
+  cron.schedule("0 21 * * *", async () => {
+    console.log("[Cron] Running daily budget & autopay check (9PM)...");
+    await runDailyChecks();
+  });
+
+  console.log("✅ Cron jobs scheduled for 9AM and 9PM daily.");
+}
+
+async function runDailyChecks(): Promise<void> {
+  try {
+    // 1. Low balance checks for all users
+    await checkAndNotifyLowBalances();
+
+    // 2. Autopay checks for all users
+    const users = await User.find();
+    for (const user of users) {
+      await checkAndNotifyAutopayTransactions(user);
+    }
+  } catch (error) {
+    console.error("Error running daily checks:", error);
+  }
+}
