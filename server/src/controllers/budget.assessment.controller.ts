@@ -25,18 +25,24 @@ export async function assessTransactionAndNotify(
       console.error(`User not found for email: ${email}`);
       return;
     }
+
     // If no monthly budget set, skip
     if (!user.monthlyBudget || user.monthlyBudget <= 0) {
       console.log(`Skipping transaction check for ${email} - no budget set`);
       return;
     }
 
-    if(tType === TransectionType.Credit){
-      console.log(`Skipping transaction check for ${email} - as its a Credit Transection`);
+    // Skip if this is a Credit transaction
+    if (tType === TransectionType.Credit) {
+      console.log(`Skipping transaction check for ${email} - Credit Transaction`);
       return;
     }
 
-    const totalSpent = user.transections.reduce((acc, t) => acc + t.amount, 0);
+    // Only count debit transactions for total spent
+    const totalSpent = user.transections
+      .filter(t => t.transectionType === TransectionType.Debit)
+      .reduce((acc, t) => acc + t.amount, 0);
+
     const remainingBudget = user.monthlyBudget - totalSpent;
 
     if (remainingBudget <= 0) {
@@ -64,7 +70,15 @@ export async function checkAndNotifyLowBalances(): Promise<void> {
     const users = await User.find();
 
     for (const user of users) {
-      const totalSpent = user.transections.reduce((acc, t) => acc + t.amount, 0);
+      if (!user.monthlyBudget || user.monthlyBudget <= 0) {
+        continue; // Skip users without a budget
+      }
+
+      // Only count debit transactions for total spent
+      const totalSpent = user.transections
+        .filter(t => t.transectionType === TransectionType.Debit)
+        .reduce((acc, t) => acc + t.amount, 0);
+
       const remainingBudget = user.monthlyBudget - totalSpent;
 
       if (remainingBudget <= user.monthlyBudget * 0.2) {
@@ -80,7 +94,6 @@ export async function checkAndNotifyLowBalances(): Promise<void> {
     console.error("Error while checking low balances:", error);
   }
 }
-
 
 export const checkAndNotifyAutopayTransactions = async (user: IUser): Promise<void> => {
   try {
