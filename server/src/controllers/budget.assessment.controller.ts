@@ -59,6 +59,9 @@ export async function assessTransactionAndNotify(
     } else if (percentage >= 10) {
       await sendSignificantTransectionEmail(name, email, amount, spentOn, time, nType);
     }
+    
+    await checkUserLowBudget(email);
+
   } catch (error) {
     console.error("Error assessing transaction:", error);
   }
@@ -144,3 +147,25 @@ async function runDailyChecks(): Promise<void> {
     console.error("Error running daily checks:", error);
   }
 }
+
+
+async function checkUserLowBudget(email: string): Promise<void> {
+  const user = await User.findOne({ email });
+  if (!user || !user.monthlyBudget || user.monthlyBudget <= 0) return;
+
+  const totalSpent = user.transections
+    .filter(t => t.transectionType === TransectionType.Debit)
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const remainingBudget = user.monthlyBudget - totalSpent;
+
+  if (remainingBudget <= user.monthlyBudget * 0.2) {
+    await sendLowBalanceEmail(
+      user.fullName,
+      user.email,
+      new Date().toISOString(),
+      NotificationType.Budget
+    );
+  }
+}
+
