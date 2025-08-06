@@ -107,7 +107,10 @@ const Navbar: React.FC<NavbarProps> = ({ user, onRefresh }) => {
       <TransactionForm
         isOpen={showTransactionForm}
         onClose={() => setShowTransactionForm(false)}
-        onSuccess={handleTransactionSuccess}
+        onSuccess={() => {
+          handleTransactionSuccess();
+          setShowTransactionForm(false);
+        }}
         userId={user._id}
       />
 

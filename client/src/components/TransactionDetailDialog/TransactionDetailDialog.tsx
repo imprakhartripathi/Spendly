@@ -285,7 +285,10 @@ const TransactionDetailDialog: React.FC<TransactionDetailDialogProps> = ({
       {/* Edit Form */}
       <TransactionForm
         isOpen={showEditForm}
-        onClose={() => setShowEditForm(false)}
+        onClose={() => {
+          setShowEditForm(false);
+          setError(""); // Clear any errors when closing edit form
+        }}
         onSuccess={handleEditSuccess}
         transaction={transaction}
         userId={userId}

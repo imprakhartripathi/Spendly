@@ -84,31 +84,53 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Reset form data when dialog opens/closes or when transaction/isAutopay changes
   useEffect(() => {
-    if (transaction) {
-      setFormData({
-        transectionType: transaction.transectionType,
-        amount: transaction.amount.toString(), // keep as string
-        spentOn: transaction.spentOn,
-        spentOnDesc: transaction.spentOnDesc,
-        onDate: new Date(transaction.onDate).toISOString().split("T")[0],
-        category: transaction.category,
-        isAutopay: transaction.isAutopay ?? isAutopay,
-        reoccurance: transaction.reoccurance ?? (isAutopay ? 30 : 0),
-      });
-    } else {
-      setFormData({
-        transectionType: "debit",
-        amount: "",
-        spentOn: "",
-        spentOnDesc: "",
-        onDate: new Date().toISOString().split("T")[0],
-        category: "",
-        isAutopay: isAutopay,
-        reoccurance: isAutopay ? 30 : 0,
-      });
+    if (isOpen) {
+      if (transaction) {
+        setFormData({
+          transectionType: transaction.transectionType,
+          amount: transaction.amount.toString(), // keep as string
+          spentOn: transaction.spentOn,
+          spentOnDesc: transaction.spentOnDesc,
+          onDate: new Date(transaction.onDate).toISOString().split("T")[0],
+          category: transaction.category,
+          isAutopay: transaction.isAutopay ?? isAutopay,
+          reoccurance: transaction.reoccurance ?? (isAutopay ? 30 : 0),
+        });
+      } else {
+        setFormData({
+          transectionType: "debit",
+          amount: "",
+          spentOn: "",
+          spentOnDesc: "",
+          onDate: new Date().toISOString().split("T")[0],
+          category: "",
+          isAutopay: isAutopay,
+          reoccurance: isAutopay ? 30 : 0,
+        });
+      }
+      // Reset error state when opening
+      setError("");
     }
-  }, [transaction, isAutopay]);
+  }, [isOpen, transaction, isAutopay]);
+
+  // Handle ESC key press
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -120,6 +142,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       ...prev,
       [name]: value, // no parsing here
     }));
+  };
+
+  const handleClose = () => {
+    // Reset form state when closing
+    setFormData({
+      transectionType: "debit",
+      amount: "",
+      spentOn: "",
+      spentOnDesc: "",
+      onDate: new Date().toISOString().split("T")[0],
+      category: "",
+      isAutopay: isAutopay,
+      reoccurance: isAutopay ? 30 : 0,
+    });
+    setError("");
+    setLoading(false);
+    onClose();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -149,7 +188,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       });
 
       onSuccess();
-      onClose();
+      handleClose();
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -166,19 +205,21 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        onClick={handleClose}
       >
         <motion.div
           className="transaction-form-modal"
           initial={{ scale: 0.9, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="form-header">
             <h2>
               {transaction ? "Edit" : "Add"}{" "}
               {isAutopay ? "Autopay" : "Transaction"}
             </h2>
-            <button className="close-btn" onClick={onClose}>
+            <button className="close-btn" onClick={handleClose}>
               <X size={20} />
             </button>
           </div>
@@ -309,7 +350,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             {error && <div className="error-message">{error}</div>}
 
             <div className="form-actions">
-              <button type="button" onClick={onClose} className="cancel-btn">
+              <button type="button" onClick={handleClose} className="cancel-btn">
                 Cancel
               </button>
               <button type="submit" disabled={loading} className="save-btn">

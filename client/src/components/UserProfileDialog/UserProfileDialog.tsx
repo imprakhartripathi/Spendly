@@ -29,7 +29,40 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Reset form data when dialog opens/closes or when user changes
   useEffect(() => {
+    if (isOpen && user) {
+      setFormData({
+        fullName: user.fullName || "",
+        email: user.email || "",
+        contact: user.contact || "",
+        image: user.image || ""
+      });
+      // Reset error and success states when opening
+      setError("");
+      setSuccess("");
+    }
+  }, [isOpen, user]);
+
+  // Handle ESC key press
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen]);
+
+  const handleClose = () => {
+    // Reset form state when closing
     if (user) {
       setFormData({
         fullName: user.fullName || "",
@@ -38,7 +71,11 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
         image: user.image || ""
       });
     }
-  }, [user]);
+    setError("");
+    setSuccess("");
+    setLoading(false);
+    onClose();
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,7 +101,7 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
       onUpdate();
       setTimeout(() => {
         setSuccess("");
-        onClose();
+        handleClose();
       }, 2000);
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong");
@@ -112,6 +149,7 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        onClick={handleClose}
       >
       <motion.div 
         className={`profile-dialog ${isOpen ? 'open' : ''}`}
@@ -119,10 +157,11 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
         transition={{ type: 'tween', duration: 0.3 }}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-header">
           <h2>User Profile</h2>
-          <button className="close-btn" onClick={onClose}>
+          <button className="close-btn" onClick={handleClose}>
             <X size={20} />
           </button>
         </div>
@@ -245,7 +284,7 @@ const UserProfileDialog: React.FC<UserProfileDialogProps> = ({
             )}
 
             <div className="form-actions">
-              <button type="button" onClick={onClose} className="cancel-btn">
+              <button type="button" onClick={handleClose} className="cancel-btn">
                 Cancel
               </button>
               <button type="submit" disabled={loading} className="save-btn">

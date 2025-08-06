@@ -286,11 +286,13 @@ const AutoPays: React.FC = () => {
         onClose={() => {
           setShowForm(false);
           setEditingTransaction(null);
+          setError(""); // Clear any errors when closing
         }}
         onSuccess={() => {
           fetchAutopayTransactions();
           setShowForm(false);
           setEditingTransaction(null);
+          setError(""); // Clear any errors on success
         }}
         transaction={editingTransaction}
         userId={user._id}
